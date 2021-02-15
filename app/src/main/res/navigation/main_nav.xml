@@ -13,12 +13,20 @@
         <action
             android:id="@+id/action_devicesFragment_to_clipsFragment"
             app:destination="@id/clipsFragment" />
+        <action
+            android:id="@+id/action_devicesFragment_to_attachDeviceFragment"
+            app:destination="@id/attachDeviceFragment" />
     </fragment>
     <fragment
         android:id="@+id/clipsFragment"
         android:name="dev.sukharev.clipangel.presentation.fragments.ClipsFragment"
         android:label="ClipsFragment"
         tools:layout="@layout/fragment_clips"/>
+    <fragment
+        android:id="@+id/attachDeviceFragment"
+        android:name="dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment"
+        android:label="AttachDeviceFragment"
+        tools:layout="@layout/fragment_attach_device"/>
 
 
 </navigation>

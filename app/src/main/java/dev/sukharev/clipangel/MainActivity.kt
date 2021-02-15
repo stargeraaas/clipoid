@@ -3,28 +3,35 @@ package dev.sukharev.clipangel
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 
 import android.widget.Button
+import android.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dev.sukharev.clipangel.presentation.BottomNavView
+import dev.sukharev.clipangel.presentation.ToolbarPresenter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
 
 
+    private lateinit var bottomMenu: BottomNavigationView
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 10
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setSupportActionBar(findViewById<androidx.appcompat.widget.Toolbar>(R.id.materialToolbar))
+
         val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        val bottomMenu: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomMenu = findViewById(R.id.bottomNavigationView)
         bottomMenu.setupWithNavController(navController)
         bottomMenu.setOnNavigationItemSelectedListener {
             when(it.itemId) {
@@ -40,5 +47,27 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun show() {
+        supportActionBar?.show()
+    }
+
+    override fun hide() {
+        supportActionBar?.hide()
+    }
+
+    override fun setBackToHome(state: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(state)
+        supportActionBar?.setDisplayShowHomeEnabled(state)
+    }
+
+    override fun setTitle(text: String?) {
+        supportActionBar?.title = text
+    }
+
+    override fun setVisibility(state: Boolean) {
+        bottomMenu.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
 
 }
