@@ -11,13 +11,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.sukharev.clipangel.R
+import dev.sukharev.clipangel.data.local.repository.Channel
+import dev.sukharev.clipangel.data.local.repository.ChannelRepository
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 
 class DevicesFragment: BaseFragment(), View.OnClickListener {
 
     private lateinit var devicesRecyclerView: RecyclerView
     private lateinit var attachDeviceButton: FloatingActionButton
+
+    private val channelRepo: ChannelRepository by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_devices, null)
@@ -38,6 +46,9 @@ class DevicesFragment: BaseFragment(), View.OnClickListener {
         attachDeviceButton.setOnClickListener(this)
 
         findNavController().currentBackStackEntry?.savedStateHandle?.get<String>("key")
+        CoroutineScope(Dispatchers.IO).launch {
+            channelRepo.create(Channel("1", "", System.currentTimeMillis()))
+        }
         println()
     }
 

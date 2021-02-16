@@ -9,6 +9,7 @@ import dev.sukharev.clipangel.data.local.repository.ChannelRepositoryImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.definition.BeanDefinition
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 
@@ -24,12 +25,12 @@ class App : Application() {
         app = this
         startKoin {
             androidContext(this@App)
-            modules(listOf(repositories))
+            modules(listOf(repositories, database))
         }
     }
 
     val repositories = module {
-        this.single { ChannelRepositoryImpl() } as ChannelRepository
+        single { ChannelRepositoryImpl(get()) } bind ChannelRepository::class
     }
 
     val database = module {
@@ -37,7 +38,7 @@ class App : Application() {
                 ClipAngelDatabase::class.java, "clip_angel.db").build()
         }
 
-        single {  }
+        single { get<ClipAngelDatabase>().getChannelDao() }
 
         single { }
     }

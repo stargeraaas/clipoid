@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dev.sukharev.clipangel.data.local.database.model.ChannelEntity
 import kotlinx.coroutines.flow.Flow
+import org.jetbrains.annotations.NotNull
 
 
 @Dao
@@ -14,7 +15,7 @@ interface ChannelDao {
     suspend fun create(entity: ChannelEntity)
 
     @Query("SELECT * FROM channelentity")
-    suspend fun getAll(): Flow<List<ChannelEntity>>
+    suspend fun getAll(): List<ChannelEntity>
 
     @Query("DELETE FROM channelentity WHERE id=:id")
     suspend fun delete(id: String)
