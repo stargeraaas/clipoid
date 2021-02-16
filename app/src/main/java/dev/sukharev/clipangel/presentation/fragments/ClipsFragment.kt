@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.sukharev.clipangel.R
+import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
 
 
@@ -18,7 +19,9 @@ class ClipsFragment: BaseFragment() {
 
     override fun showBottomNavigation(): Boolean = true
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+
         return inflater.inflate(R.layout.fragment_clips, null)
     }
 }
