@@ -1,19 +1,18 @@
-package dev.sukharev.clipangel.firebase;
+package dev.sukharev.clipangel.firebase
 
-import androidx.annotation.NonNull;
+import android.content.SharedPreferences
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import org.koin.android.ext.android.inject
 
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
+class ClipAngelNotificationService : FirebaseMessagingService() {
 
-public class ClipAngelNotificationService extends FirebaseMessagingService {
 
-    @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
     }
 
-    @Override
-    public void onNewToken(@NonNull String s) {
-        super.onNewToken(s);
+    override fun onNewToken(s: String) {
+        super.onNewToken(s)
     }
 }

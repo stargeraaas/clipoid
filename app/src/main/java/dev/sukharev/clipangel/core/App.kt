@@ -3,6 +3,8 @@ package dev.sukharev.clipangel.core
 import android.app.Application
 import android.preference.PreferenceManager
 import androidx.room.Room
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dev.sukharev.clipangel.data.local.database.ClipAngelDatabase
@@ -50,9 +52,9 @@ class App : Application() {
 
         single { get<ClipAngelDatabase>().getChannelDao() }
 
-        single { Firebase.database }
+        single { Firebase.database } bind FirebaseDatabase::class
 
-        single {  }
+        single { getSharedPreferences("ClipAngel", MODE_PRIVATE) }
     }
 
 }

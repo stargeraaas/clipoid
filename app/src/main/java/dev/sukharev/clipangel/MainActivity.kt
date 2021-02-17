@@ -10,6 +10,8 @@ import android.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import dev.sukharev.clipangel.presentation.BottomNavView
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
 
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(findViewById<androidx.appcompat.widget.Toolbar>(R.id.materialToolbar))
+        setSupportActionBar(findViewById(R.id.materialToolbar))
 
         val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

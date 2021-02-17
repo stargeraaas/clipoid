@@ -53,28 +53,17 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
         attachDeviceButton.setOnClickListener(this)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val db = Firebase.database
-            val ref = db.getReference("vAXOQXeRD64MZ!NNCrNIUw==")
-            val recipient = ref.child("recipients")
+//            val data = db.getReference("vAXOQXeRD64MZ!NNCrNIUw==").child("data")
+//                    .get()
+//                    .addOnCompleteListener {
+//                        println()
+//                    }
+//                    .addOnFailureListener {
+//                        println()
+//                    }
 
-            val data = db.getReference("vAXOQXeRD64MZ!NNCrNIUw==").child("data")
-                    .get()
-                    .addOnCompleteListener {
-                        println()
-                    }
-                    .addOnFailureListener {
-                        println()
-                    }
 
-            val key = ref.child("recipients").push().key
-
-            val childUpdates = hashMapOf<String, Any>(
-                    "${UUID.randomUUID().toString()}" to ""
-            )
-
-            recipient.updateChildren(childUpdates)
-
-            channelInteractor.createChannel(ChannelCredentials(UUID.randomUUID().toString(), "ASD"))
+            channelInteractor.createChannel(ChannelCredentials("vAXOQXeRD64MZ!NNCrNIUw==", "ASD"))
 
         }
 
