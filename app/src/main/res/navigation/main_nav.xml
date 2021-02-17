@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/devicesFragment"
-        android:name="dev.sukharev.clipangel.presentation.fragments.DevicesFragment"
+        android:name="dev.sukharev.clipangel.presentation.fragments.ChannelsFragment"
         android:label="DevicesFragment"
         tools:layout="@layout/fragment_devices">
         <action

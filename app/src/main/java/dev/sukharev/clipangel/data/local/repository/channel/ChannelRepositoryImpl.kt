@@ -1,7 +1,8 @@
-package dev.sukharev.clipangel.data.local.repository
+package dev.sukharev.clipangel.data.local.repository.channel
 
 import dev.sukharev.clipangel.data.local.database.dao.ChannelDao
 import dev.sukharev.clipangel.data.local.database.model.ChannelEntity
+import dev.sukharev.clipangel.domain.channel.models.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

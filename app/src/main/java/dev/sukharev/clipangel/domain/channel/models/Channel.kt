@@ -1,4 +1,4 @@
-package dev.sukharev.clipangel.data.local.repository
+package dev.sukharev.clipangel.domain.channel.models
 
 
 
