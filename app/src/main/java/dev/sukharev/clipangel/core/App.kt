@@ -14,7 +14,9 @@ import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteReposi
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepositoryImpl
 import dev.sukharev.clipangel.domain.channel.ChannelInteractor
 import dev.sukharev.clipangel.domain.channel.ChannelInteractorImpl
+import dev.sukharev.clipangel.presentation.viewmodels.ChannelListViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -24,7 +26,7 @@ class App : Application() {
 
     companion object {
         lateinit var app: Application
-        private set
+            private set
     }
 
     override fun onCreate() {
@@ -32,8 +34,12 @@ class App : Application() {
         app = this
         startKoin {
             androidContext(this@App)
-            modules(listOf(repositories, database, useCases))
+            modules(listOf(repositories, database, useCases, viewModels))
         }
+    }
+
+    val viewModels = module {
+        viewModel { ChannelListViewModel(get()) }
     }
 
     val repositories = module {
@@ -46,8 +52,9 @@ class App : Application() {
     }
 
     val database = module {
-         single { Room.databaseBuilder(applicationContext,
-                ClipAngelDatabase::class.java, "clip_angel.db").build()
+        single {
+            Room.databaseBuilder(applicationContext,
+                    ClipAngelDatabase::class.java, "clip_angel.db").build()
         }
 
         single { get<ClipAngelDatabase>().getChannelDao() }

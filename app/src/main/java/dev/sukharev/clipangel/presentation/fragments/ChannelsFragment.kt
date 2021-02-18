@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,12 +17,20 @@ import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.channel.ChannelInteractor
 import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
+import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.CHANNEL_ID_EXTRA
+import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.CHANNEL_SECRET_EXTRA
+import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_ERROR
+import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_ERROR_MESSAGE
+import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_OK
+import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.SCAN_RESULT
 import dev.sukharev.clipangel.presentation.recycler.ChannelItemVM
 import dev.sukharev.clipangel.presentation.recycler.ChannelRecyclerAdapter
+import dev.sukharev.clipangel.presentation.viewmodels.ChannelListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
 
@@ -30,9 +39,10 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     private lateinit var devicesRecyclerView: RecyclerView
     private lateinit var attachDeviceButton: FloatingActionButton
 
-    private val channelInteractor: ChannelInteractor by inject()
 
     private val channelAdapter = ChannelRecyclerAdapter()
+
+    private val channelViewModel: ChannelListViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_devices, null)
@@ -52,29 +62,33 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
         attachDeviceButton = view.findViewById(R.id.attach_device)
         attachDeviceButton.setOnClickListener(this)
 
-        CoroutineScope(Dispatchers.IO).launch {
-//            val data = db.getReference("vAXOQXeRD64MZ!NNCrNIUw==").child("data")
-//                    .get()
-//                    .addOnCompleteListener {
-//                        println()
-//                    }
-//                    .addOnFailureListener {
-//                        println()
-//                    }
-
-
-            channelInteractor.createChannel(ChannelCredentials("vAXOQXeRD64MZ!NNCrNIUw==", "ASD"))
-
-        }
-
         devicesRecyclerView.apply {
             adapter = channelAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+    }
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.get<String>("key")
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        manageQrResult()
+    }
 
-        channelAdapter.addItems(listOf(ChannelItemVM("1", "A", "S", false)))
+    private fun manageQrResult() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.apply {
+            when(get<Int>(SCAN_RESULT)) {
+                RESULT_OK -> doOnSuccessQrResult(this)
+                RESULT_ERROR -> doOnFailureQrResult(this)
+            }
+        }
+    }
+
+    private fun doOnSuccessQrResult(state: SavedStateHandle) {
+        channelViewModel.createChannel(ChannelCredentials(state.get<String>(CHANNEL_ID_EXTRA)!!,
+                        state.get<String>(CHANNEL_SECRET_EXTRA)!!))
+    }
+
+    private fun doOnFailureQrResult(state: SavedStateHandle) {
+        println(state.get<String>(RESULT_ERROR_MESSAGE))
     }
 
     override fun onClick(view: View?) {
