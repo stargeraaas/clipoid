@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.crashlytics.internal.common.CrashlyticsCore
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dev.sukharev.clipangel.R
@@ -62,7 +64,6 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
         devicesRecyclerView = view.findViewById(R.id.devices_recycler)
         attachDeviceButton = view.findViewById(R.id.attach_device)
         attachDeviceButton.setOnClickListener(this)
-
         devicesRecyclerView.apply {
             adapter = channelAdapter
             layoutManager = LinearLayoutManager(requireContext())

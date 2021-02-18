@@ -24,6 +24,10 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode"/>
 
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+
         <service android:name=".firebase.ClipAngelNotificationService"
             android:directBootAware="true"
             android:exported="false">
@@ -32,5 +36,7 @@
             </intent-filter>
         </service>
     </application>
+
+
 
 </manifest>
