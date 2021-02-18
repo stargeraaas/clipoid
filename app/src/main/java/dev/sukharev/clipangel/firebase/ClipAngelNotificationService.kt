@@ -1,9 +1,7 @@
 package dev.sukharev.clipangel.firebase
 
-import android.content.SharedPreferences
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.koin.android.ext.android.inject
 
 class ClipAngelNotificationService : FirebaseMessagingService() {
 

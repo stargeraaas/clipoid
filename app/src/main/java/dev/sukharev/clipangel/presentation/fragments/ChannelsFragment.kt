@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -71,6 +72,11 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         manageQrResult()
+        channelViewModel.isLoadingLiveData.observe(requireActivity()){
+            it?.let {
+
+            }
+        }
     }
 
     private fun manageQrResult() {
