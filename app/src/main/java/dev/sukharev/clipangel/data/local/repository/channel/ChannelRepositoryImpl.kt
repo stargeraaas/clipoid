@@ -11,7 +11,7 @@ class ChannelRepositoryImpl(private val channelDao: ChannelDao): ChannelReposito
 
 
     override suspend fun create(channel: Channel) {
-        channelDao.create(ChannelEntity(channel.id, channel.secureKey, channel.createTime))
+        channelDao.create(ChannelEntity(channel.id, channel.name ,channel.secureKey, 1, channel.createTime))
     }
 
     override fun delete(channel: Channel) {
@@ -23,6 +23,6 @@ class ChannelRepositoryImpl(private val channelDao: ChannelDao): ChannelReposito
     }
 
     override fun getAll(): Flow<List<Channel>> = flow {
-
+        emit(channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.createTime) })
     }
 }
