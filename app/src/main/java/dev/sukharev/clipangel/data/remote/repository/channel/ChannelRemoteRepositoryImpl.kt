@@ -6,20 +6,26 @@ import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.runBlocking
 import java.lang.Exception
 
 class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase): ChannelRemoteRepository {
 
     @ExperimentalCoroutinesApi
     override suspend fun createChannel(channel: ChannelCredentials, deviceToken: String) = callbackFlow {
-        val channelDb = firebaseDb.getReference(channel.id)
-        val recipient = channelDb.child("recipients")
+        firebaseDb.goOnline()
+        val channelDb = firebaseDb.getReference(channel.id).get().addOnSuccessListener {
+            println()
+        }.addOnFailureListener {
+            offer(Result.Failure.Error(it))
+//            cancel("DB", it)
+        }
+        val recipient = firebaseDb.getReference(channel.id).child("recipients")
 
-        channelDb.get().addOnSuccessListener { snapshot ->
+        firebaseDb.getReference(channel.id).get().addOnSuccessListener { snapshot ->
             recipient.updateChildren(hashMapOf<String, Any>("${Build.BRAND} ${Build.DEVICE}" to deviceToken)).addOnCompleteListener {
                 offer(Result.Success.Value(Channel(channel.id,
                         snapshot.child("senderName").value.toString(),
@@ -32,6 +38,25 @@ class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase): Cha
         awaitClose()
     }
 
+    @ExperimentalCoroutinesApi
+    override suspend fun deleteChannel(id: String): Flow<Result<Channel>> = callbackFlow {
+        val channelDb = firebaseDb.getReference(id)
+        try {
+            val recipient = channelDb.child("recipients")
+            channelDb.get().addOnSuccessListener { snapshot ->
+
+            }.addOnFailureListener {
+                offer(Result.Failure.Error(it))
+                close()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+//        sendBlocking(Result.Failure.Error(Exception("Database Exception")))
+        awaitClose {
+            cancel()
+        }
+    }
 
     override suspend fun getChannelData(channelId: String) {
         TODO("Not yet implemented")

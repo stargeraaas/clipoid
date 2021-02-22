@@ -19,7 +19,7 @@ class InformationView: LinearLayout {
     private var subtitleTextView: TextView? = null
     private var submitButton: Button? = null
 
-    private var viewState = ViewState()
+    var viewState: ViewState = ViewState()
 
     constructor(context: Context): super(context)
 

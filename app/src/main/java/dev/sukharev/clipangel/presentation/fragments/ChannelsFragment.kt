@@ -1,9 +1,7 @@
 package dev.sukharev.clipangel.presentation.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
@@ -22,17 +20,19 @@ import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Compan
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_ERROR_MESSAGE
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_OK
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.SCAN_RESULT
+import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelBottomDialog
 import dev.sukharev.clipangel.presentation.recycler.ChannelItemVM
 import dev.sukharev.clipangel.presentation.recycler.ChannelRecyclerAdapter
 import dev.sukharev.clipangel.presentation.view.info.InformationView
-import dev.sukharev.clipangel.presentation.viewmodels.ChannelListViewModel
+import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
-    private lateinit var devicesRecyclerView: RecyclerView
+    private var devicesRecyclerView: RecyclerView? = null
     private lateinit var attachDeviceButton: FloatingActionButton
     private var loadingContent: ConstraintLayout? = null
 
@@ -43,30 +43,35 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
     private val channelViewModel: ChannelListViewModel by viewModel()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_devices, null)
     }
 
-    private val channelStateObserver = Observer<ChannelFragmentState> {
+    private val channelStateObserver = Observer<ViewFragmentState> {
         when (it) {
-            is ChannelFragmentState.Loading -> {
-                println()
-                devicesRecyclerView.visibility = View.INVISIBLE
-                errorLayout?.visibility = View.INVISIBLE
+            is ViewFragmentState.Loading -> {
                 loadingContent?.visibility = View.VISIBLE
+                devicesRecyclerView?.visibility = View.INVISIBLE
+                errorLayout?.visibility = View.INVISIBLE
+                emptyChannelsLayout?.visibility = View.INVISIBLE
             }
 
-            is ChannelFragmentState.Content<*> -> {
+            is ViewFragmentState.Content<*> -> {
                 (it.value as? List<Channel>)?.let {
                     if (it.isEmpty()) {
                         emptyChannelsLayout?.visibility = View.VISIBLE
-                        devicesRecyclerView.visibility = View.INVISIBLE
+                        devicesRecyclerView?.visibility = View.INVISIBLE
                     } else {
                         channelAdapter.addItems(it.map {
                             ChannelItemVM(it.id, it.name, it.createTime, it.isDeleted)
                         })
                         emptyChannelsLayout?.visibility = View.INVISIBLE
-                        devicesRecyclerView.visibility = View.VISIBLE
+                        devicesRecyclerView?.visibility = View.VISIBLE
                     }
 
                     errorLayout?.visibility = View.INVISIBLE
@@ -74,10 +79,16 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                 }
             }
 
-            is ChannelFragmentState.Failure -> {
-                devicesRecyclerView.visibility = View.INVISIBLE
+            is ViewFragmentState.Failure -> {
+                devicesRecyclerView?.visibility = View.INVISIBLE
                 errorLayout?.visibility = View.VISIBLE
                 loadingContent?.visibility = View.INVISIBLE
+
+                errorLayout?.apply {
+                    viewState.titleText = it.title
+                    viewState.subtitleText = it.subtitle
+                    changeState(viewState)
+                }
             }
         }
     }
@@ -102,7 +113,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
         emptyChannelsLayout?.visibility = View.INVISIBLE
         emptyChannelsLayout?.setOnClickSubmitButtonListener {
-            toCreateNewDevice()
+            toAttachNewDevice()
         }
 
         errorLayout?.visibility = View.INVISIBLE
@@ -110,13 +121,53 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
         loadingContent = view.findViewById(R.id.loading_container)
 
         attachDeviceButton.setOnClickListener(this)
-        devicesRecyclerView.apply {
+        devicesRecyclerView?.apply {
+            layoutManager = LinearLayoutManager(view.context)
             adapter = channelAdapter
-            layoutManager = LinearLayoutManager(requireContext())
         }
 
-        channelViewModel.channelFragmentState.observe(requireActivity(), channelStateObserver)
+
+
+        channelAdapter.addOnItemClickListener(object : ChannelRecyclerAdapter.OnItemClickListener {
+            override fun onItemClicked(channelItemVM: ChannelItemVM) {
+                GlobalScope.launch {
+                    channelViewModel.getChannelById(channelItemVM.id).collect {
+                        requireActivity().runOnUiThread {
+                            val detainChannelBottomDialog = DetailChannelBottomDialog(it)
+                            detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
+                                override fun onClick(id: String) {
+                                    channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(id))
+                                }
+                            })
+                            detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
+                        }
+                    }
+                }
+            }
+        })
+
         channelViewModel.loadState()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        channelViewModel.viewFragmentState.observe(requireActivity(), channelStateObserver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        channelViewModel.viewFragmentState.removeObserver(channelStateObserver)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.channel_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_attach -> toAttachNewDevice()
+        }
+        return true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -134,8 +185,9 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun doOnSuccessQrResult(state: SavedStateHandle) {
-        channelViewModel.createChannel(ChannelCredentials(state.get<String>(CHANNEL_ID_EXTRA)!!,
-                        state.get<String>(CHANNEL_SECRET_EXTRA)!!))
+        channelViewModel.action(ChannelListViewModel.Action.AttachChannel(
+                ChannelCredentials(state.get<String>(CHANNEL_ID_EXTRA)!!,
+                        state.get<String>(CHANNEL_SECRET_EXTRA)!!)))
     }
 
     private fun doOnFailureQrResult(state: SavedStateHandle) {
@@ -144,11 +196,11 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.attach_device -> toCreateNewDevice()
+            R.id.attach_device -> toAttachNewDevice()
         }
     }
 
-    private fun toCreateNewDevice() {
+    private fun toAttachNewDevice() {
         NavHostFragment.findNavController(this)
                 .navigate(R.id.attachDeviceFragment)
     }

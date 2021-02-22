@@ -20,8 +20,8 @@ class ChannelRepositoryImpl(private val channelDao: ChannelDao) : ChannelReposit
 
     }
 
-    override fun get(id: String): Flow<List<Channel>> = flow {
-
+    override fun get(id: String): Flow<Channel> = flow {
+        emit(channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.createTime) }.find { it.id == id }!!)
     }
 
     override fun getAll(): Flow<List<Channel>> = flow {

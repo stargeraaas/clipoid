@@ -1,9 +1,7 @@
 package dev.sukharev.clipangel.core
 
 import android.app.Application
-import android.preference.PreferenceManager
 import androidx.room.Room
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -14,7 +12,7 @@ import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteReposi
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepositoryImpl
 import dev.sukharev.clipangel.domain.channel.ChannelInteractor
 import dev.sukharev.clipangel.domain.channel.ChannelInteractorImpl
-import dev.sukharev.clipangel.presentation.viewmodels.ChannelListViewModel
+import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin

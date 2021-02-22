@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/delete_channel_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#CD2626"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/identifier_channel_text_view"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/identifier_channel_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/identifier_channel_text_view"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/channel_name"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="MyChannel" />
+
+    <TextView
+        android:id="@+id/created_date_channel_text_view"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/channel_name"
+        app:layout_constraintStart_toStartOf="@+id/channel_name"
+        app:layout_constraintTop_toBottomOf="@+id/channel_name"
+        tools:text="Channel created: 16 aug. 2020" />
+
+    <TextView
+        android:id="@+id/attached_date_channel_text_view"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/created_date_channel_text_view"
+        app:layout_constraintStart_toStartOf="@+id/created_date_channel_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/created_date_channel_text_view"
+        tools:text="Channel attached: 26 sep. 2020" />
+
+    <TextView
+        android:id="@+id/identifier_channel_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/attached_date_channel_text_view"
+        app:layout_constraintStart_toStartOf="@+id/attached_date_channel_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/attached_date_channel_text_view"
+        tools:text="Channel identifier: ySDyADSyuiHDAShk=" />
+</androidx.constraintlayout.widget.ConstraintLayout>

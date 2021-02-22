@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:layout_margin="8dp">
 
     <TextView
         android:id="@+id/channel_name"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,9 +25,14 @@
         android:id="@+id/channel_create_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/channel_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/channel_name"
         app:layout_constraintTop_toTopOf="@+id/channel_name" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+

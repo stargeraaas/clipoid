@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface ChannelRepository {
     suspend fun create(channel: Channel)
     fun delete(channel: Channel)
-    fun get(id: String): Flow<List<Channel>>
+    fun get(id: String): Flow<Channel>
     fun getAll(): Flow<List<Channel>>
 }

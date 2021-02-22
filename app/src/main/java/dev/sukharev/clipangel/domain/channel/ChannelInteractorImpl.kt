@@ -16,7 +16,7 @@ class ChannelInteractorImpl(val channelRepository: ChannelRepository,
 
 
     @ExperimentalCoroutinesApi
-    override suspend fun createChannel(credentials: ChannelCredentials): Flow<Result<EmptyResult>> = callbackFlow {
+    override suspend fun createChannel(credentials: ChannelCredentials): Flow<Result<List<Channel>>> = callbackFlow {
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             GlobalScope.launch {
                 channelRemoteRepository.createChannel(credentials, it.result ?: "").collect {
@@ -40,7 +40,12 @@ class ChannelInteractorImpl(val channelRepository: ChannelRepository,
 
     @ExperimentalCoroutinesApi
     override suspend fun deleteChannel(id: String): Flow<Result<EmptyResult>> = callbackFlow {
-
+//        channelRemoteRepository.deleteChannel(id).combine(channelRepository.get(id)) { r, t ->
+//            println()
+//        }
+        channelRemoteRepository.deleteChannel(id).collect {
+            println()
+        }
     }
 
     override suspend fun getAllChannels(): Flow<Result<List<Channel>>> = channelRepository.getAll().map {

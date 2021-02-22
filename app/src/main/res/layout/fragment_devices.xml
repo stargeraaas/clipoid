@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <include layout="@layout/fragment_loading"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <dev.sukharev.clipangel.presentation.view.info.InformationView
-        android:id="@+id/error_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:titleText="Network exception"
-        app:subtitleText="You can retry request"
-        app:imageSrc="@drawable/ic_warning"
-        app:buttonText="RETRY REQUEST"
+    <include
+        layout="@layout/fragment_loading"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,26 +14,39 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <dev.sukharev.clipangel.presentation.view.info.InformationView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:buttonText="RETRY REQUEST"
+        app:imageSrc="@drawable/ic_warning"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleText="You can retry request"
+        app:titleText="Network exception"/>
+
+    <dev.sukharev.clipangel.presentation.view.info.InformationView
         android:id="@+id/empty_content_template"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:titleText="No channels found"
-        app:subtitleText="You can create a new channel right now!"
-        app:imageSrc="@drawable/ic_followers"
+        android:visibility="invisible"
         app:buttonText="ATTACH NEW CHANNEL"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:imageSrc="@drawable/ic_followers"
+        app:subtitleText="You can create a new channel right now!"
+        app:titleText="No channels found" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/devices_recycler"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/recycler_channel_item"/>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,6 +56,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_launcher_foreground" />

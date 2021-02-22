@@ -11,6 +11,8 @@ class ChannelRecyclerAdapter : RecyclerView.Adapter<ChannelItemViewHolder>() {
 
     private val items = mutableListOf<ChannelItemVM>()
 
+    private val clickListeners = mutableListOf<OnItemClickListener>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recycler_channel_item, null)
@@ -18,7 +20,7 @@ class ChannelRecyclerAdapter : RecyclerView.Adapter<ChannelItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ChannelItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], clickListeners)
     }
 
     override fun getItemCount(): Int = items.size
@@ -29,6 +31,18 @@ class ChannelRecyclerAdapter : RecyclerView.Adapter<ChannelItemViewHolder>() {
             addAll(newItems)
             notifyDataSetChanged()
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClicked(channelItemVM: ChannelItemVM)
+    }
+
+    fun addOnItemClickListener(listener: OnItemClickListener) {
+        clickListeners.add(listener)
+    }
+
+    fun removeOnItemClickListener(listener: OnItemClickListener) {
+        clickListeners.remove(listener)
     }
 
 }
@@ -48,12 +62,13 @@ class ChannelItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private var id: String? = null
 
     init {
-        itemView.setOnClickListener {
-            println("CLICKED ON ITEM WITH ID $id")
-        }
+
     }
 
-    fun bind(model: ChannelItemVM) {
+    fun bind(model: ChannelItemVM, onClickListeners: List<ChannelRecyclerAdapter.OnItemClickListener>) {
+        itemView.setOnClickListener {
+            onClickListeners.forEach { it.onItemClicked(model) }
+        }
         id = model.id
         nameView?.text = model.name
         createDateView?.text = model.createDate
