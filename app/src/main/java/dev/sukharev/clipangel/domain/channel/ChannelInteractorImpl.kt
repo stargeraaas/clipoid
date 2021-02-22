@@ -8,10 +8,8 @@ import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.domain.models.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
+import java.lang.Exception
 
 class ChannelInteractorImpl(val channelRepository: ChannelRepository,
                             val channelRemoteRepository: ChannelRemoteRepository) : ChannelInteractor {
@@ -26,7 +24,7 @@ class ChannelInteractorImpl(val channelRepository: ChannelRepository,
                         channelRepository.create(it.asSuccess().value)
                         offer(Result.Success.Empty)
                         close()
-                    } else if (it.isFailure()){
+                    } else if (it.isFailure()) {
                         offer(Result.Failure.Error(it.asFailure().error))
                         close()
                     }
@@ -44,6 +42,10 @@ class ChannelInteractorImpl(val channelRepository: ChannelRepository,
     override suspend fun deleteChannel(id: String): Flow<Result<EmptyResult>> = callbackFlow {
 
     }
+
+    override suspend fun getAllChannels(): Flow<Result<List<Channel>>> = channelRepository.getAll().map {
+        Result.Success.Value(it)
+    }.catch { Result.Failure.Error(it) }
 
     @ExperimentalCoroutinesApi
     override suspend fun updateToken(channelId: String, token: String):
