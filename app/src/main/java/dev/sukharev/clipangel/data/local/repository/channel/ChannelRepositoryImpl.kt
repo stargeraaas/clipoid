@@ -5,26 +5,36 @@ import dev.sukharev.clipangel.data.local.database.model.ChannelEntity
 import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import java.util.*
 
 
 class ChannelRepositoryImpl(private val channelDao: ChannelDao) : ChannelRepository {
 
-    private val cachedResult: MutableList<Channel> = mutableListOf()
+    override suspend fun create(channel: Channel): Flow<List<Channel>> = flow {
+        channelDao.create(ChannelEntity(channel.id, channel.name ,channel.secureKey,
+                channel.createTime))
 
-    override suspend fun create(channel: Channel) {
-        channelDao.create(ChannelEntity(channel.id, channel.name ,channel.secureKey, 1, channel.createTime))
+        getAll().collect {
+            emit(it)
+        }
     }
 
-    override fun delete(channel: Channel) {
-
+    override suspend fun delete(id: String): Flow<List<Channel>> = flow {
+        channelDao.delete(id)
+        getAll().collect {
+            emit(it)
+        }
     }
 
-    override fun get(id: String): Flow<Channel> = flow {
-        emit(channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.createTime) }.find { it.id == id }!!)
+    override suspend fun get(id: String): Flow<Channel> = flow {
+        emit(channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.registerTime) }.find { it.id == id }!!)
     }
 
-    override fun getAll(): Flow<List<Channel>> = flow {
-        emit(channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.createTime) })
+    override suspend fun getAll(): Flow<List<Channel>> = flow {
+        val channels = channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.registerTime) }
+        println()
+        emit(channels)
     }
 }

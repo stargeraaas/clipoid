@@ -7,9 +7,11 @@ import android.view.View
 
 import android.widget.Button
 import android.widget.Toolbar
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dev.sukharev.clipangel.presentation.BottomNavView
@@ -24,6 +26,12 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
         private const val REQUEST_CAMERA_PERMISSION = 10
     }
 
+    lateinit var navController: NavController
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,20 +40,14 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
 
         val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         bottomMenu = findViewById(R.id.bottomNavigationView)
         bottomMenu.setupWithNavController(navController)
-        bottomMenu.setOnNavigationItemSelectedListener {
-            when(it.itemId) {
-                R.id.action_to_clips -> {
-                    navController.navigate(R.id.clipsFragment)
-                }
-                R.id.action_to_devices -> {
-                    navController.navigate(R.id.devicesFragment)
-                }
-            }
 
-            true
+        Firebase.auth.signInAnonymously().addOnSuccessListener {
+            println()
+        }.addOnFailureListener {
+            println()
         }
 
     }

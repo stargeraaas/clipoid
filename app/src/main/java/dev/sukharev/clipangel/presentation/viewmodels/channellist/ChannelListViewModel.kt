@@ -42,37 +42,38 @@ class ChannelListViewModel(private val channelInteractor: ChannelInteractor) : V
     fun action(action: Action) {
         latestAction = action
         when (action) {
-            is Action.DeattachChannel -> {
-                networkJob = CoroutineScope(Dispatchers.IO).launch {
-                    channelInteractor.deleteChannel(action.id)
-                            .onStart {
-//                                _channelFragmentState.postValue(ViewFragmentState.Loading())
-                            }
-                            .collect {
-                                println()
-                            }
-                }
-
-            }
-
-            is Action.AttachChannel -> createChannel(action.credentials)
-
+            is Action.DeattachChannel -> deattachChannel(action.id)
+            is Action.AttachChannel -> attachChannel(action.credentials)
         }
     }
 
     @ExperimentalCoroutinesApi
-    private fun createChannel(credentials: ChannelCredentials) {
+    private fun attachChannel(credentials: ChannelCredentials) {
         loadChannelsJob?.cancel()
-
         networkJob = CoroutineScope(Dispatchers.IO).launch {
-
             channelInteractor.createChannel(credentials).onStart {
                 _channelFragmentState.postValue(ViewFragmentState.Loading())
             }.collect {
-                if (it.isSuccess())
+                if (it.isSuccess()) {
+                    action(Action.Nothing())
                     _channelFragmentState.postValue(ViewFragmentState.Content(it.asSuccess().value))
-                else
+                } else
                     _channelFragmentState.postValue(ViewFragmentState.Failure("Произошла ошибка", it.asFailure().error?.message))
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun deattachChannel(id: String) {
+        loadChannelsJob?.cancel()
+        networkJob = CoroutineScope(Dispatchers.IO).launch {
+            channelInteractor.deleteChannel(id).onStart {
+                _channelFragmentState.postValue(ViewFragmentState.Loading())
+            }.collect {
+                if (it.isSuccess()) {
+                    action(Action.Nothing())
+                    _channelFragmentState.postValue(ViewFragmentState.Content(it.asSuccess().value))
+                } else _channelFragmentState.postValue(ViewFragmentState.Failure("Произошла ошибка", it.asFailure().error?.message))
             }
         }
     }
@@ -94,6 +95,7 @@ class ChannelListViewModel(private val channelInteractor: ChannelInteractor) : V
         class AttachChannel(val credentials: ChannelCredentials) : Action()
         class DeattachChannel(val id: String) : Action()
         class LoadAllChannels() : Action()
+        class Nothing(): Action()
     }
 
 }

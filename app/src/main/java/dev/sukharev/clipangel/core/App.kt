@@ -8,11 +8,14 @@ import com.google.firebase.ktx.Firebase
 import dev.sukharev.clipangel.data.local.database.ClipAngelDatabase
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepositoryImpl
+import dev.sukharev.clipangel.data.local.repository.credentials.Credentials
+import dev.sukharev.clipangel.data.local.repository.credentials.CredentialsClipAngel
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepository
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepositoryImpl
 import dev.sukharev.clipangel.domain.channel.ChannelInteractor
 import dev.sukharev.clipangel.domain.channel.ChannelInteractorImpl
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -21,6 +24,8 @@ import org.koin.dsl.module
 
 
 class App : Application() {
+
+    private val credentials: Credentials by inject()
 
     companion object {
         lateinit var app: Application
@@ -34,6 +39,7 @@ class App : Application() {
             androidContext(this@App)
             modules(listOf(repositories, database, useCases, viewModels))
         }
+
     }
 
     val viewModels = module {
@@ -42,11 +48,12 @@ class App : Application() {
 
     val repositories = module {
         single { ChannelRepositoryImpl(get()) } bind ChannelRepository::class
-        single { ChannelRemoteRepositoryImpl(get()) } bind ChannelRemoteRepository::class
+        single { ChannelRemoteRepositoryImpl(get(), get()) } bind ChannelRemoteRepository::class
+        single { CredentialsClipAngel(get()) } bind Credentials::class
     }
 
     val useCases = module {
-        factory { ChannelInteractorImpl(get(), get()) } bind ChannelInteractor::class
+        factory { ChannelInteractorImpl(get(), get(), get()) } bind ChannelInteractor::class
     }
 
     val database = module {
@@ -59,7 +66,6 @@ class App : Application() {
 
         single { Firebase.database } bind FirebaseDatabase::class
 
-        single { getSharedPreferences("ClipAngel", MODE_PRIVATE) }
     }
 
 }

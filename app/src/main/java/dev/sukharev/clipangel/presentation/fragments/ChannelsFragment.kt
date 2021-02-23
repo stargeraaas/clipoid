@@ -28,6 +28,7 @@ import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListVie
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
 
 
 class ChannelsFragment : BaseFragment(), View.OnClickListener {
@@ -68,7 +69,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                         devicesRecyclerView?.visibility = View.INVISIBLE
                     } else {
                         channelAdapter.addItems(it.map {
-                            ChannelItemVM(it.id, it.name, it.createTime, it.isDeleted)
+                            ChannelItemVM(it.id, it.name, Date(it.createTime).toString(), it.isDeleted)
                         })
                         emptyChannelsLayout?.visibility = View.INVISIBLE
                         devicesRecyclerView?.visibility = View.VISIBLE
@@ -102,6 +103,24 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
     override fun showBottomNavigation(): Boolean = true
 
+    val channelListener = object : ChannelRecyclerAdapter.OnItemClickListener {
+        override fun onItemClicked(channelItemVM: ChannelItemVM) {
+            GlobalScope.launch {
+                channelViewModel.getChannelById(channelItemVM.id).collect {
+                    requireActivity().runOnUiThread {
+                        val detainChannelBottomDialog = DetailChannelBottomDialog(it)
+                        detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
+                            override fun onClick(id: String) {
+                                channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(id))
+                            }
+                        })
+                        detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
+                    }
+                }
+            }
+        }
+    }
+
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -128,34 +147,20 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
 
 
-        channelAdapter.addOnItemClickListener(object : ChannelRecyclerAdapter.OnItemClickListener {
-            override fun onItemClicked(channelItemVM: ChannelItemVM) {
-                GlobalScope.launch {
-                    channelViewModel.getChannelById(channelItemVM.id).collect {
-                        requireActivity().runOnUiThread {
-                            val detainChannelBottomDialog = DetailChannelBottomDialog(it)
-                            detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
-                                override fun onClick(id: String) {
-                                    channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(id))
-                                }
-                            })
-                            detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
-                        }
-                    }
-                }
-            }
-        })
+
 
         channelViewModel.loadState()
     }
 
     override fun onStart() {
         super.onStart()
+        channelAdapter.addOnItemClickListener(channelListener)
         channelViewModel.viewFragmentState.observe(requireActivity(), channelStateObserver)
     }
 
     override fun onStop() {
         super.onStop()
+        channelAdapter.removeOnItemClickListener(channelListener)
         channelViewModel.viewFragmentState.removeObserver(channelStateObserver)
     }
 
@@ -181,6 +186,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                 RESULT_OK -> doOnSuccessQrResult(this)
                 RESULT_ERROR -> doOnFailureQrResult(this)
             }
+            this.remove<Int>(SCAN_RESULT)
         }
     }
 
