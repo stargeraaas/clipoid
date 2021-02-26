@@ -10,5 +10,6 @@ data class ChannelEntity(
         @PrimaryKey val id: String,
         @ColumnInfo(name = "name") val name: String,
         @ColumnInfo(name = "secret") val secret: String,
-        @ColumnInfo(name = "register_time") val registerTime: Long
+        @ColumnInfo(name = "register_time") val registerTime: Long,
+        @ColumnInfo(name = "is_deleted") val isDeleted: Boolean = false
 )

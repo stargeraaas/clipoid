@@ -8,12 +8,18 @@ import com.google.firebase.ktx.Firebase
 import dev.sukharev.clipangel.data.local.database.ClipAngelDatabase
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepositoryImpl
+import dev.sukharev.clipangel.data.local.repository.clip.ClipRepository
+import dev.sukharev.clipangel.data.local.repository.clip.ClipRepositoryImpl
 import dev.sukharev.clipangel.data.local.repository.credentials.Credentials
 import dev.sukharev.clipangel.data.local.repository.credentials.CredentialsClipAngel
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepository
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepositoryImpl
+import dev.sukharev.clipangel.data.remote.repository.clip.ClipRemoteRepository
+import dev.sukharev.clipangel.data.remote.repository.clip.ClipRemoteRepositoryImpl
 import dev.sukharev.clipangel.domain.channel.ChannelInteractor
 import dev.sukharev.clipangel.domain.channel.ChannelInteractorImpl
+import dev.sukharev.clipangel.domain.clip.create.CreateClipCase
+import dev.sukharev.clipangel.domain.clip.create.CreateClipCaseImpl
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -50,10 +56,13 @@ class App : Application() {
         single { ChannelRepositoryImpl(get()) } bind ChannelRepository::class
         single { ChannelRemoteRepositoryImpl(get(), get()) } bind ChannelRemoteRepository::class
         single { CredentialsClipAngel(get()) } bind Credentials::class
+        single { ClipRemoteRepositoryImpl(get(), get()) } bind ClipRemoteRepository::class
+        single { ClipRepositoryImpl(get()) } bind ClipRepository::class
     }
 
     val useCases = module {
         factory { ChannelInteractorImpl(get(), get(), get()) } bind ChannelInteractor::class
+        factory { CreateClipCaseImpl(get(), get()) } bind CreateClipCase::class
     }
 
     val database = module {
@@ -64,7 +73,11 @@ class App : Application() {
 
         single { get<ClipAngelDatabase>().getChannelDao() }
 
-        single { Firebase.database } bind FirebaseDatabase::class
+        single { Firebase.database.apply {
+            setPersistenceEnabled(false)
+        } } bind FirebaseDatabase::class
+
+        single { get<ClipAngelDatabase>().getClipDao() }
 
     }
 

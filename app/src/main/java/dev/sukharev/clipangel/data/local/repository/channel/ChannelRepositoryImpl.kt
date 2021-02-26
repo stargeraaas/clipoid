@@ -7,6 +7,7 @@ import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 import java.util.*
 
 
@@ -33,8 +34,10 @@ class ChannelRepositoryImpl(private val channelDao: ChannelDao) : ChannelReposit
     }
 
     override suspend fun getAll(): Flow<List<Channel>> = flow {
-        val channels = channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.registerTime) }
-        println()
-        emit(channels)
+        try {
+            emit(channelDao.getAll().map { Channel(it.id, it.name, it.secret, it.registerTime) })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

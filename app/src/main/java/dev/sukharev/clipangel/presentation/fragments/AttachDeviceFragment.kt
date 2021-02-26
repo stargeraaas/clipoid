@@ -99,7 +99,8 @@ class AttachDeviceFragment: BaseFragment(), QRCodeReaderView.OnQRCodeReadListene
     @Serializable
     data class QrCodeParsedData(
             @SerialName("channel") val channelId: String,
-            @SerialName("key") val secret: String
+            @SerialName("key") val secret: String,
+            @SerialName("senderName") val senderName: String
     )
 
 }
