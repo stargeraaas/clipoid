@@ -87,4 +87,4 @@ lint/tmp/
 # Android Profiling
 *.hprof
 !/app/google-services.json
-!/secure.properties
+secure.properties
