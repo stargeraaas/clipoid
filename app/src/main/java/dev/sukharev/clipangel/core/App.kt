@@ -20,6 +20,7 @@ import dev.sukharev.clipangel.domain.channel.ChannelInteractor
 import dev.sukharev.clipangel.domain.channel.ChannelInteractorImpl
 import dev.sukharev.clipangel.domain.clip.create.CreateClipCase
 import dev.sukharev.clipangel.domain.clip.create.CreateClipCaseImpl
+import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListViewModel
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -50,6 +51,7 @@ class App : Application() {
 
     val viewModels = module {
         viewModel { ChannelListViewModel(get()) }
+        viewModel { ClipListViewModel(get()) }
     }
 
     val repositories = module {

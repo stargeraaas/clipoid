@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dev.sukharev.clipangel.data.local.database.model.ClipEntity
+import kotlinx.coroutines.flow.Flow
 import org.jetbrains.annotations.NotNull
 
 @Dao
@@ -13,5 +14,5 @@ interface ClipDao {
     suspend fun create(clip: ClipEntity)
 
     @Query("SELECT * FROM clip")
-    suspend fun getAll(): List<ClipEntity>
+    fun getAll(): Flow<List<ClipEntity>>
 }

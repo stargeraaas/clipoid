@@ -7,12 +7,16 @@ import dev.sukharev.clipangel.domain.models.Result
 import dev.sukharev.clipangel.domain.models.asFailure
 import dev.sukharev.clipangel.domain.models.asSuccess
 import dev.sukharev.clipangel.domain.models.isSuccess
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
-class CreateClipCaseImpl(private val  repository: ClipRepository,
-                         private val remoteRepository: ClipRemoteRepository): CreateClipCase {
+class CreateClipCaseImpl(private val repository: ClipRepository,
+                         private val remoteRepository: ClipRemoteRepository) : CreateClipCase {
 
     override fun create(channelId: String): Flow<Result<Clip>> = flow {
         remoteRepository.get(channelId).collect {
@@ -24,6 +28,15 @@ class CreateClipCaseImpl(private val  repository: ClipRepository,
                 }
             } else emit(it.asFailure())
         }
+//        remoteRepository.get(channelId).collect {
+//            if (it.isSuccess()) {
+//                repository.create(it.asSuccess().value).collect {
+//                    if (it.isSuccess())
+//                        emit(Result.Success.Value(it.asSuccess().value.filter { it.channelId == channelId }.last()))
+//                    else emit(it.asFailure())
+//                }
+//            } else emit(it.asFailure())
+//        }
 
     }
 

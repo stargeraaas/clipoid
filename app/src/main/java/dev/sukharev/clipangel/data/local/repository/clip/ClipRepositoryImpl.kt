@@ -16,7 +16,10 @@ class ClipRepositoryImpl(private val clipDao: ClipDao): ClipRepository {
     override fun create(clip: Clip): Flow<Result<List<Clip>>> = flow {
         try {
             clipDao.create(clip.mapToEntity())
-            emit(Result.Success.Value(clipDao.getAll().map { it.mapToDomain() }))
+            clipDao.getAll().collect {
+                emit(Result.Success.Value(it.map { it.mapToDomain() }))
+            }
+
         } catch (e: Exception) {
             emit(Result.Failure.Error(e))
         }
@@ -31,10 +34,8 @@ class ClipRepositoryImpl(private val clipDao: ClipDao): ClipRepository {
     }
 
     override fun getAll(): Flow<Result<List<Clip>>> = flow {
-        try {
-            emit(Result.Success.Value(clipDao.getAll().map { it.mapToDomain() }))
-        } catch (e: Exception) {
-            emit(Result.Failure.Error(e))
+        clipDao.getAll().collect {
+            emit(Result.Success.Value(it.map { it.mapToDomain() }))
         }
     }
 }

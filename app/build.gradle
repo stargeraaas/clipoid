@@ -7,6 +7,9 @@ plugins {
     id 'kotlinx-serialization'
 }
 
+def apikeyPropertiesFile = rootProject.file("secure.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 ext {
     // latest stable
@@ -24,6 +27,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        buildConfigField("String", "CLIPANGEL_AES_IV", apikeyProperties['CLIPANGEL_AES_IV'])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
