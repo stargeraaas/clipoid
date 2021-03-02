@@ -4,5 +4,6 @@
 
     <item app:showAsAction="always" android:id="@+id/action_attach"
         android:icon="@drawable/ic_plus"
+        android:iconTint="@color/white"
         android:title="Attach" />
 </menu>

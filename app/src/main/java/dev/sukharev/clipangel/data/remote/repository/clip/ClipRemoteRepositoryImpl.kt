@@ -35,7 +35,7 @@ class ClipRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,
                 try {
                     channelRepository.get(channelId).collect {
                         offer(Result.Success.Value(Clip.create(channelId,
-                                decrypt(snapshot.value.toString(), it.secureKey))))
+                                decrypt(snapshot.value.toString(), it.secureKey), 0L)))
                     }
                 } catch (e: Exception) {
                     offer(Result.Failure.Error(e))

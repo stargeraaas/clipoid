@@ -73,6 +73,7 @@ class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,
         firebaseDb.getReference(channelId).get().addOnSuccessListener {
             offer(Result.Success.Value(Clip(UUID.randomUUID().toString(),
                     (it.value as HashMap<*, *>)["data"].toString(),
+                    Date().time,
                     (it.value as HashMap<*, *>)["dataTimestamp"].toString().toLong(),
                     channelId
             )))

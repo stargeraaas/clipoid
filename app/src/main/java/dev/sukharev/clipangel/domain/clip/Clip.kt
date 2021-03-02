@@ -1,25 +1,34 @@
 package dev.sukharev.clipangel.domain.clip
 
+import dev.sukharev.clipangel.utils.toDateFormat1
 import java.util.*
 
 data class Clip(
         val id: String,
         val data: String,
-        val createDate: Long,
-        var channelId: String
+        val deliveredTime: Long,
+        val createdTime: Long,
+        var channelId: String,
+        var isFavorite: Boolean = false
 ) {
 
     companion object {
-        fun create(channelId: String, data: String) = Clip(
+        fun create(channelId: String, data: String, createdTime: Long) = Clip(
                 UUID.randomUUID().toString(),
                 data,
                 Date().time,
-                channelId
+                createdTime,
+                channelId,
+                false
         )
     }
 
-    fun getDateWithFormat(): String {
-        return ""
+    fun getCreatedTimeWithFormat(): String {
+        return createdTime.toDateFormat1()
+    }
+
+    fun getDeliveredTimeWithFormat(): String {
+        return deliveredTime.toDateFormat1()
     }
 
 

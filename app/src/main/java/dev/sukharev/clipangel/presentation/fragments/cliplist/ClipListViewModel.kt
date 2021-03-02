@@ -19,9 +19,11 @@ class ClipListViewModel(private val clipRepository: ClipRepository) : ViewModel(
     fun loadClips() {
         CoroutineScope(Dispatchers.IO).launch {
             clipRepository.getAll().collect {
-                if (it.isSuccess()) _clipItemsLiveData.postValue(it.asSuccess().value.map {
-                    ClipItemViewHolder.Model(it.id, it.data)
-                })
+                if (it.isSuccess()) _clipItemsLiveData.postValue(it.asSuccess().value
+                        .sortedByDescending { it.createdTime }
+                        .map {
+                            ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.getCreatedTimeWithFormat())
+                        })
             }
         }
     }

@@ -4,6 +4,7 @@ import dev.sukharev.clipangel.data.local.database.dao.ClipDao
 import dev.sukharev.clipangel.data.local.database.model.ClipEntity
 import dev.sukharev.clipangel.data.local.database.model.mapToDomain
 import dev.sukharev.clipangel.data.local.database.model.mapToEntity
+import dev.sukharev.clipangel.data.remote.repository.clip.NoClipDataInDatabaseException
 import dev.sukharev.clipangel.domain.clip.Clip
 import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,10 @@ class ClipRepositoryImpl(private val clipDao: ClipDao): ClipRepository {
         try {
             clipDao.create(clip.mapToEntity())
             clipDao.getAll().collect {
-                emit(Result.Success.Value(it.map { it.mapToDomain() }))
+                if (it.isEmpty())
+                    emit(Result.Failure.Error(NoClipDataInDatabaseException(clip.channelId)))
+                else
+                    emit(Result.Success.Value(it.map { it.mapToDomain() }))
             }
 
         } catch (e: Exception) {

@@ -12,6 +12,7 @@ data class ClipEntity(
         @PrimaryKey val id: String,
         @ColumnInfo(name = "channel_id") val channelId: String,
         @ColumnInfo(name = "data") val data: String,
-        @ColumnInfo(name = "create_date") val createDate: Long,
+        @ColumnInfo(name = "delivered_date") val deliveredDate: Long,
+        @ColumnInfo(name = "created_date") val createdDate: Long,
         @ColumnInfo(name = "is_favorite") val isFavorite: Boolean = false
 )

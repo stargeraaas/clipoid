@@ -10,7 +10,7 @@ class ClipListAdapter: RecyclerView.Adapter<ClipItemViewHolder>() {
     private val items = mutableListOf<ClipItemViewHolder.Model>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClipItemViewHolder {
-        val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.item_clip, null)
+        val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.item_clip, parent, false)
         return ClipItemViewHolder(layoutView)
     }
 

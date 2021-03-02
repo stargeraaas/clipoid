@@ -145,10 +145,6 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
             adapter = channelAdapter
         }
 
-
-
-
-
         channelViewModel.loadState()
     }
 

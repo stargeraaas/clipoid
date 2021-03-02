@@ -4,4 +4,15 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="ThemeOverlay.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="colorPrimary">@color/design_default_color_primary</item>
+        <item name="colorPrimaryVariant">@color/design_default_color_primary</item>
+        <item name="colorOnPrimary">@color/design_default_color_primary</item>
+    </style>
+
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
+    </style>
+
 </resources>
