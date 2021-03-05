@@ -88,3 +88,4 @@ lint/tmp/
 *.hprof
 !/app/google-services.json
 secure.properties
+/app/google-services.json
