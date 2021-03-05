@@ -1,5 +1,6 @@
 package dev.sukharev.clipangel.core
 
+import android.app.Activity
 import android.app.Application
 import androidx.room.Room
 import com.google.firebase.database.FirebaseDatabase
@@ -37,6 +38,8 @@ class App : Application() {
     companion object {
         lateinit var app: Application
             private set
+
+        var currentActivity: Activity? = null
     }
 
     override fun onCreate() {

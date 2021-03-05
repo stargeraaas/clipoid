@@ -3,20 +3,29 @@ package dev.sukharev.clipangel.presentation.fragments.cliplist
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import org.w3c.dom.Text
 
 
-class ClipItemViewHolder(rootView: View): RecyclerView.ViewHolder(rootView) {
+class ClipItemViewHolder(rootView: View):
+        RecyclerView.ViewHolder(rootView){
 
     private val descriptionTextView: TextView? = rootView.findViewById(R.id.description_clip)
     private val copyButton: ImageView? = rootView.findViewById(R.id.copy_button)
     private val favoriteIcon: ImageView? = rootView.findViewById(R.id.favorite_icon)
     private val dateTextView: TextView? = rootView.findViewById(R.id.date_clip)
+    private val shortDetailContainer: ConstraintLayout? = rootView.findViewById(R.id.short_detail_container)
+
+    var onItemClickListener: OnClipItemClickListener? = null
 
     fun bind(model: Model) {
+        shortDetailContainer?.setOnClickListener {
+            onItemClickListener?.onItemClicked(model.id)
+        }
+
         descriptionTextView?.text = model.description
 
         favoriteIcon?.visibility = if (model.isFavorite) View.VISIBLE else View.GONE

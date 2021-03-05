@@ -9,9 +9,13 @@ class ClipListAdapter: RecyclerView.Adapter<ClipItemViewHolder>() {
 
     private val items = mutableListOf<ClipItemViewHolder.Model>()
 
+    var onItemCLickListener: OnClipItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClipItemViewHolder {
         val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.item_clip, parent, false)
-        return ClipItemViewHolder(layoutView)
+        return ClipItemViewHolder(layoutView).apply {
+            this.onItemClickListener = onItemCLickListener
+        }
     }
 
     override fun onBindViewHolder(holder: ClipItemViewHolder, position: Int) {

@@ -35,6 +35,12 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".services.ClipboardCopyBroadcast">
+            <intent-filter>
+                <action android:name="com.clipangel.clip.ACTION_COPY_CLIP"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 

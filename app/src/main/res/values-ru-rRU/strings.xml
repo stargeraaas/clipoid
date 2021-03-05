@@ -5,4 +5,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="helper_qr_code_instruction">Чтобы зарегистрировать новое устройство,
         отсканируйте QR код./&gt;/&gt; Зайдите на</string>
+    <string name="copied_alert">Клип скопирован!</string>
+    <string name="copy">Скопировать</string>
 </resources>

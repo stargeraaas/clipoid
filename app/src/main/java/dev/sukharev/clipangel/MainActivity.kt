@@ -1,6 +1,7 @@
 package dev.sukharev.clipangel
 
 
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -14,8 +15,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.presentation.BottomNavView
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
+import dev.sukharev.clipangel.services.ClipboardCopyBroadcast
+import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.ACTION_UPDATE_NOTIFICATION
 
 class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
 
@@ -32,12 +36,14 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
         super.onBackPressed()
     }
 
+    private val copyBroadcast = ClipboardCopyBroadcast()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        App.currentActivity = this
         setSupportActionBar(findViewById(R.id.materialToolbar))
-
+        registerReceiver(copyBroadcast, IntentFilter(ACTION_UPDATE_NOTIFICATION))
         val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -71,6 +77,11 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
 
     override fun setVisibility(state: Boolean) {
         bottomMenu.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(copyBroadcast)
     }
 
 
