@@ -6,4 +6,8 @@
         отсканируйте QR код.<br/><br/> Зайдите на</string>
     <string name="copied_alert">Clip was copied</string>
     <string name="copy">Copy</string>
+    <string name="created_date">Created date</string>
+    <string name="delete">Delete</string>
+    <string name="identifier">Channel identifier</string>
+    <string name="clip_count">Count of clips</string>
 </resources>
