@@ -51,7 +51,8 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         val job = CoroutineScope(Dispatchers.IO).launch {
             clipRepository.getAll().zip(channelRepository.getAll()) { clips, channels ->
                 clips.find { it.id == clipId }?.let { clip ->
-                    val channelName: String = channels.find { clip.channelId == it.id }?.name ?: "<UNKNOWN>"
+                    val channelName: String = channels.find { clip.channelId == it.id }?.name
+                            ?: "<UNKNOWN>"
                     _detailedClip.postValue(DetailedClipModel(clip.id, channelName,
                             clip.createdTime.toDateFormat1(), clip.data, clip.isFavorite))
                 }
@@ -68,14 +69,27 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     }
 
     @ExperimentalCoroutinesApi
+    fun markAsFavorite(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
+        clipRepository.getClipById(clipId)
+                .catch { e -> println(e.printStackTrace()) }
+
+                .collect {
+                    clipRepository.update(it.apply {
+                        it.isFavorite = !it.isFavorite
+                    }).catch { e -> println(e.printStackTrace()) }
+                            .collect {
+                                getDetailedClipData(it.id)
+                            }
+                }
+    }
+
+    @ExperimentalCoroutinesApi
     fun deleteClip(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
-        clipRepository.getAll().collect {
-            it.find { it.id == clipId }?.apply {
-                clipRepository.delete(this)
-                        .catch { println("ERRR") }
-                        .onCompletion { _onDeleteClip.postValue(true) }
-                        .collect()
-            }
+        clipRepository.getClipById(clipId).collect { clip ->
+            clipRepository.delete(clip)
+                    .catch { println("ERRR") }
+                    .onCompletion { _onDeleteClip.postValue(true) }
+                    .collect()
         }
     }
 

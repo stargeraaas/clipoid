@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
@@ -79,6 +80,10 @@ class DetailClipDialogFragment(private val clipId: String) : BottomSheetDialogFr
 
         deleteButton?.setOnClickListener {
             viewModel.deleteClip(clipId)
+        }
+
+        favoriteButton?.setOnClickListener {
+            viewModel.markAsFavorite(clipId)
         }
 
         viewModel.detailedClip.observe(this, detailedClipObserver)

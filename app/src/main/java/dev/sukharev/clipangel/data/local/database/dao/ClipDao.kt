@@ -13,6 +13,9 @@ interface ClipDao {
     @Query("SELECT * FROM clip")
     suspend fun getAll(): List<ClipEntity>
 
+    @Query("SELECT * FROM clip WHERE id =:id")
+    suspend fun getClipById(id: String): ClipEntity?
+
     @Query("SELECT * FROM clip")
     fun getAllWithSubscription(): Flow<List<ClipEntity>>
 

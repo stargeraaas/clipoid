@@ -25,6 +25,11 @@ class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
         emit(clip)
     }.flowOn(Dispatchers.IO)
 
+    override fun getClipById(id: String): Flow<Clip> = flow {
+        val clip = clipDao.getClipById(id) ?: throw NullPointerException()
+        emit(clip.mapToDomain())
+    }
+
     override fun getAll(): Flow<List<Clip>> = flow {
         emit(clipDao.getAll().map { entity -> entity.mapToDomain() })
     }.flowOn(Dispatchers.IO)

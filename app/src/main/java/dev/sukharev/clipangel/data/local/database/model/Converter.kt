@@ -3,7 +3,7 @@ package dev.sukharev.clipangel.data.local.database.model
 import dev.sukharev.clipangel.domain.clip.Clip
 
 fun Clip.mapToEntity(): ClipEntity {
-    return ClipEntity(id, channelId, data, deliveredTime, createdTime)
+    return ClipEntity(id, channelId, data, deliveredTime, createdTime, isFavorite)
 }
 
 fun ClipEntity.mapToDomain(): Clip {
