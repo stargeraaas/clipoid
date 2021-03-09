@@ -19,6 +19,11 @@ fun String.copyInClipboardWithToast(text: String) {
     Toast.makeText(App.app, text, Toast.LENGTH_SHORT).show()
 }
 
+fun String.copyInClipboardWithToast(resId: Int) {
+    copyInClipboard()
+    Toast.makeText(App.app, App.app.getString(resId), Toast.LENGTH_SHORT).show()
+}
+
 fun Long.toDateFormat1(): String {
     val pattern = "d MMM yyyy HH:mm:ss"
     val locale = Locale.getDefault()

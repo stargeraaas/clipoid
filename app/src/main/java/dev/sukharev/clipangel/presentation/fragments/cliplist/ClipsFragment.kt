@@ -14,7 +14,7 @@ import dev.sukharev.clipangel.presentation.fragments.BaseFragment
 import org.koin.android.ext.android.inject
 
 
-class ClipsFragment: BaseFragment(), OnClipItemClickListener {
+class ClipsFragment : BaseFragment(), OnClipItemClickListener {
 
     private val clipListAdapter = ClipListAdapter().apply {
         onItemCLickListener = this@ClipsFragment
@@ -61,8 +61,6 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
     }
 
     override fun onItemClicked(id: String) {
-        println("CLICKED ON ITEM WITH ID $id")
-        val fragment = DetailClipDialogFragment()
-        fragment.show(childFragmentManager, "clip_detail_bottom_dialog")
+        DetailClipDialogFragment(id).show(childFragmentManager, "clip_detail_bottom_dialog")
     }
 }

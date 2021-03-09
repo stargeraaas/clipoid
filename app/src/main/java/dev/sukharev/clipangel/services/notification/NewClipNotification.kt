@@ -18,7 +18,7 @@ class NewClipNotification(context: Context, private val data: String) : BaseNoti
     override fun show(): Int {
         val notificationBuilder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setContentTitle("Получен новый клип!")
-                .setContentText(getDataAsSubSequence(data))
+                .setContentText(data)
                 .setSmallIcon(R.mipmap.ic_launcher_clipangel_round)
                 .addAction(R.drawable.ic_copy, context.getString(R.string.copy), getPendingIntent())
 
@@ -28,7 +28,7 @@ class NewClipNotification(context: Context, private val data: String) : BaseNoti
     }
 
     private fun getDataAsSubSequence(data: String): String =
-            if (data.length < 50) data else data.subSequence(0, 50).toString()
+            if (data.length < 150) data else data.subSequence(0, 150).toString()
 
     private fun getCopyClipIntent() = Intent(ACTION_UPDATE_NOTIFICATION).apply {
         putExtra(CLIP_DATA_EXTRA, this@NewClipNotification.data)

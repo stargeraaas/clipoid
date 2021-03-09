@@ -5,5 +5,5 @@ import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.flow.Flow
 
 interface ClipRemoteRepository {
-    fun get(channelId: String): Flow<Result<Clip>>
+    fun get(channelId: String): Flow<Clip>
 }

@@ -9,6 +9,7 @@ import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.domain.clip.Clip
 import dev.sukharev.clipangel.domain.models.Result
 import dev.sukharev.clipangel.utils.aes.AESCrypt
+import dev.sukharev.clipangel.utils.aes.DecryptException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
@@ -24,26 +25,24 @@ class ClipRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,
 
     @RequiresApi(Build.VERSION_CODES.O)
     @ExperimentalCoroutinesApi
-    override fun get(channelId: String): Flow<Result<Clip>> = callbackFlow {
+    override fun get(channelId: String): Flow<Clip> = callbackFlow {
         firebaseDb.getReference(channelId).apply { keepSynced(true) }
                 .child("data").get().addOnSuccessListener { snapshot ->
-            GlobalScope.launch {
-                // No clip data in database
-                if (snapshot.value == null)
-                    throw NoClipDataInDatabaseException(channelId)
+                    GlobalScope.launch {
+                        // No clip data in database
+                        if (snapshot.value == null) {
+                            close(NoClipDataInDatabaseException(channelId))
+                        }
 
-                try {
-                    channelRepository.get(channelId).collect {
-                        offer(Result.Success.Value(Clip.create(channelId,
-                                decrypt(snapshot.value.toString(), it.secureKey), 0L)))
+                        channelRepository.get(channelId).collect {
+                            offer(Clip.create(channelId,
+                                    decrypt(snapshot.value.toString(), it.secureKey), Date().time))
+                        }
+
                     }
-                } catch (e: Exception) {
-                    offer(Result.Failure.Error(e))
+                }.addOnFailureListener {
+                    close(it)
                 }
-            }
-        }.addOnFailureListener {
-            offer(Result.Failure.Error(it))
-        }
 
         awaitClose()
     }

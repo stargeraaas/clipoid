@@ -54,7 +54,7 @@ class App : Application() {
 
     val viewModels = module {
         viewModel { ChannelListViewModel(get()) }
-        viewModel { ClipListViewModel(get()) }
+        viewModel { ClipListViewModel(get(), get()) }
     }
 
     val repositories = module {
