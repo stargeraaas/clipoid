@@ -15,7 +15,7 @@ class ChannelRecyclerAdapter : RecyclerView.Adapter<ChannelItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_channel_item, null)
+                .inflate(R.layout.recycler_channel_item, parent, false)
         return ChannelItemViewHolder(itemView)
     }
 

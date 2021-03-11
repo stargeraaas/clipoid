@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_to_devices"
-        android:icon="@drawable/ic_connection"
-        android:title="Channels" />
+        android:icon="@drawable/ic_radio"
+        android:title="@string/channels" />
     <item android:id="@+id/action_to_clips"
-        android:icon="@drawable/ic_copy"
-        android:title="Clips" />
+        android:icon="@drawable/ic_sticky_note"
+        android:title="@string/clips" />
     <item android:id="@+id/action_to_settings"
-        android:icon="@drawable/ic_copy"
-        android:title="Settings" />
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
 </menu>

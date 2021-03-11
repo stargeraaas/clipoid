@@ -6,15 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.domain.channel.models.Channel
+import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListViewModel
 import dev.sukharev.clipangel.utils.toDateFormat1
+import org.koin.android.ext.android.inject
 import java.util.*
 
 class DetailChannelBottomDialog(val channel: Channel): BottomSheetDialogFragment() {
 
     private var onClickListener: OnClickListener? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.layout_detail_channel_bottom_sheet, container, false)

@@ -17,22 +17,13 @@ class ChannelInteractorImpl(val channelRepository: ChannelRepository,
                             val credentialsRepository: Credentials) : ChannelInteractor {
 
 
+    @FlowPreview
     @ExperimentalCoroutinesApi
-    override suspend fun createChannel(credentials: ChannelCredentials): Flow<Result<List<Channel>>> = callbackFlow {
+    override suspend fun createChannel(credentials: ChannelCredentials): Flow<List<Channel>> =
+            channelRemoteRepository.createChannel(credentials,
+                    credentialsRepository.getFirebaseToken() ?: "")
+                    .flatMapMerge { channelRepository.create(it) }
 
-        channelRemoteRepository.createChannel(credentials,
-                credentialsRepository.getFirebaseToken() ?: "").collect {
-            if (it.isSuccess()) {
-                channelRepository.create(it.asSuccess().value).collect {
-                    offer(Result.Success.Value(it))
-                }
-            } else if (it.isFailure()) {
-                offer(Result.Failure.Error(it.asFailure().error))
-            }
-        }
-
-        awaitClose()
-    }
 
     @ExperimentalCoroutinesApi
     override suspend fun deleteChannel(id: String): Flow<Result<List<Channel>>> = callbackFlow {

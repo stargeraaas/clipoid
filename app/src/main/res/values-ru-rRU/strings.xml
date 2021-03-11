@@ -3,12 +3,19 @@
     <string name="app_name">clipangel-android-client</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="helper_qr_code_instruction">Чтобы зарегистрировать новое устройство,
-        отсканируйте QR код./&gt;/&gt; Зайдите на</string>
+    <string name="helper_qr_code_instruction">1. Откройте ClipAngel\n2. Перейдите: Клип -> Clip channel ->
+        Connect recipient\n3. Установите флажок в позицию show\n4. Отсканируйте QR код</string>
     <string name="copied_alert">Клип скопирован!</string>
     <string name="copy">Копировать</string>
     <string name="created_date">Дата создания</string>
     <string name="delete">Удалить</string>
     <string name="identifier">Идентификатор канала</string>
     <string name="clip_count">Количество клипов</string>
+    <string name="channels">Каналы</string>
+    <string name="clips">Клипы</string>
+    <string name="settings">Настройки</string>
+    <string name="my_channels">Мои каналы</string>
+    <string name="attach_new_channel">Добавить канал</string>
+    <string name="no_channels_found">У вас нет ни одного канала</string>
+    <string name="can_create_new_channel">Вы можете добавить его прямо сейчас!</string>
 </resources>

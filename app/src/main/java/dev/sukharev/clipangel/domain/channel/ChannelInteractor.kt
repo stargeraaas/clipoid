@@ -7,7 +7,7 @@ import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.flow.Flow
 
 interface ChannelInteractor {
-    suspend fun createChannel(credentials: ChannelCredentials): Flow<Result<List<Channel>>>
+    suspend fun createChannel(credentials: ChannelCredentials): Flow<List<Channel>>
     suspend fun deleteChannel(id: String): Flow<Result<List<Channel>>>
 
     suspend fun getAllChannels(): Flow<Result<List<Channel>>>

@@ -32,10 +32,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        app:buttonText="ATTACH NEW CHANNEL"
+        app:buttonText="@string/attach_new_channel"
         app:imageSrc="@drawable/ic_followers"
-        app:subtitleText="You can create a new channel right now!"
-        app:titleText="No channels found" />
+        app:subtitleText="@string/can_create_new_channel"
+        app:titleText="@string/no_channels_found" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/devices_recycler"

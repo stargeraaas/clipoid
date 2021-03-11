@@ -19,7 +19,7 @@ class ChannelListViewModel(private val channelInteractor: ChannelInteractor) : V
     private val _channelFragmentState = MutableLiveData<ViewFragmentState>()
     val viewFragmentState: LiveData<ViewFragmentState> = _channelFragmentState
 
-    private var networkJob: Job? = null
+    private var attachChannelJob: Job? = null
     private var loadChannelsJob: Job? = null
 
     @ExperimentalCoroutinesApi
@@ -50,23 +50,23 @@ class ChannelListViewModel(private val channelInteractor: ChannelInteractor) : V
     @ExperimentalCoroutinesApi
     private fun attachChannel(credentials: ChannelCredentials) {
         loadChannelsJob?.cancel()
-        networkJob = CoroutineScope(Dispatchers.IO).launch {
-            channelInteractor.createChannel(credentials).onStart {
-                _channelFragmentState.postValue(ViewFragmentState.Loading())
-            }.collect {
-                if (it.isSuccess()) {
-                    action(Action.Nothing())
-                    _channelFragmentState.postValue(ViewFragmentState.Content(it.asSuccess().value))
-                } else
-                    _channelFragmentState.postValue(ViewFragmentState.Failure("Произошла ошибка", it.asFailure().error?.message))
-            }
+        attachChannelJob = CoroutineScope(Dispatchers.IO).launch {
+            channelInteractor.createChannel(credentials)
+                    .onStart {
+                        _channelFragmentState.postValue(ViewFragmentState.Loading())
+                    }
+                    .catch { e -> _channelFragmentState.postValue(ViewFragmentState.Failure("Произошла ошибка", e.message)) }
+                    .collect { channelList ->
+                        action(Action.Nothing())
+                        _channelFragmentState.postValue(ViewFragmentState.Content(channelList))
+                    }
         }
     }
 
     @ExperimentalCoroutinesApi
     private fun deattachChannel(id: String) {
         loadChannelsJob?.cancel()
-        networkJob = CoroutineScope(Dispatchers.IO).launch {
+        attachChannelJob = CoroutineScope(Dispatchers.IO).launch {
             channelInteractor.deleteChannel(id).onStart {
                 _channelFragmentState.postValue(ViewFragmentState.Loading())
             }.collect {
@@ -80,7 +80,7 @@ class ChannelListViewModel(private val channelInteractor: ChannelInteractor) : V
 
     override fun onCleared() {
         super.onCleared()
-        networkJob?.cancel()
+        attachChannelJob?.cancel()
         loadChannelsJob?.cancel()
     }
 
@@ -95,7 +95,7 @@ class ChannelListViewModel(private val channelInteractor: ChannelInteractor) : V
         class AttachChannel(val credentials: ChannelCredentials) : Action()
         class DeattachChannel(val id: String) : Action()
         class LoadAllChannels() : Action()
-        class Nothing(): Action()
+        class Nothing() : Action()
     }
 
 }

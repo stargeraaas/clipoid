@@ -1,5 +1,6 @@
 package dev.sukharev.clipangel.presentation.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -9,6 +10,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.domain.channel.models.Channel
@@ -20,6 +23,7 @@ import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Compan
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_ERROR_MESSAGE
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_OK
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.SCAN_RESULT
+import dev.sukharev.clipangel.presentation.fragments.dialogs.CustomAlertDialog
 import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelBottomDialog
 import dev.sukharev.clipangel.presentation.recycler.ChannelItemVM
 import dev.sukharev.clipangel.presentation.recycler.ChannelRecyclerAdapter
@@ -97,7 +101,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
 
     override fun initToolbar(presenter: ToolbarPresenter) {
-        presenter.setTitle("Мои устройства")
+        presenter.setTitle(getString(R.string.my_channels))
         presenter.setBackToHome(false)
         presenter.show()
     }
@@ -112,7 +116,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                         val detainChannelBottomDialog = DetailChannelBottomDialog(it)
                         detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
                             override fun onClick(id: String) {
-                                channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(id))
+                                showDeletingAlertDialog(id)
                             }
                         })
                         detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
@@ -120,6 +124,32 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun showDeletingAlertDialog(channelId: String) {
+        val dialog = CustomAlertDialog()
+
+        dialog.show(childFragmentManager, "channel_deleting") {
+            dialog.apply {
+                negativeButton?.text = "Отменить"
+                negativeButton?.setOnClickListener {
+                    dismiss()
+                }
+                positiveButton?.text = "Да, удалить"
+                positiveButton?.setTextColor(requireContext().getColor(android.R.color.holo_red_dark))
+                positiveButton?.setOnClickListener {
+                    channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(channelId))
+                }
+
+                titleTextView?.text = "Удаление канала"
+                bodyTextView?.text = "При удалении данного канала также будут удалены все связанные с ним клипы"
+            }
+        }
+
+    }
+
+    private val deletingChannelObserver = Observer<Boolean> {
+
     }
 
     @ExperimentalCoroutinesApi

@@ -14,4 +14,10 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+
+    <color name="pantone_primary">#12465B</color>
+    <color name="pantone_second">#D6D3CA</color>
+    <color name="pantone_light_green">#FBFAF1</color>
+    <color name="pantone_orange">#D8574A</color>
+    <color name="pantone_desert">#CAAF81</color>
 </resources>

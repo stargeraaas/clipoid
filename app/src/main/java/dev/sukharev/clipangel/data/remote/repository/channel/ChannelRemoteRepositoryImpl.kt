@@ -9,6 +9,7 @@ import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.domain.clip.Clip
 import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -28,15 +29,15 @@ class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,
             firebaseDb.goOnline()
             firebaseDb.getReference(channel.id).get().addOnSuccessListener { snapshot ->
                 getRecipientsByIdFromDB(channel.id).updateChildren(getFirebaseTokenAndDeviceIdentifier()).addOnCompleteListener {
-                    offer(Result.Success.Value(Channel(channel.id,
+                    offer(Channel(channel.id,
                             snapshot.child(SENDER_NAME_DB_ALIAS).value.toString(),
-                            channel.secret, Date().time)))
+                            channel.secret, Date().time))
                 }.addOnFailureListener {
-                    offer(Result.Failure.Error(it))
+                    close(it)
                 }
             }
         }.addOnFailureListener {
-            offer(Result.Failure.Error(it))
+            close(it)
         }
 
 //        getClipData(channel.id).collect {

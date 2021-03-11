@@ -1,12 +1,10 @@
 package dev.sukharev.clipangel.utils;
 
-import android.util.Base64;
-
 import org.junit.Test;
 
 import java.security.GeneralSecurityException;
 
-import static org.junit.Assert.*;
+import dev.sukharev.clipangel.utils.aes.AESCrypt;
 
 public class AESCryptTest {
 
