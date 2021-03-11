@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
         navController = navHostFragment.navController
         bottomMenu = findViewById(R.id.bottomNavigationView)
         bottomMenu.setupWithNavController(navController)
-
+        bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
+            number = 1
+        }
         Firebase.auth.signInAnonymously().addOnSuccessListener {
             println()
         }.addOnFailureListener {

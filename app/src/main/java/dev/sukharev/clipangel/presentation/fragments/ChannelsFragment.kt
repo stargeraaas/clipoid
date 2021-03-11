@@ -1,6 +1,5 @@
 package dev.sukharev.clipangel.presentation.fragments
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,8 +9,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.domain.channel.models.Channel
@@ -33,7 +30,6 @@ import dev.sukharev.clipangel.utils.toDateFormat1
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class ChannelsFragment : BaseFragment(), View.OnClickListener {
@@ -48,6 +44,8 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     private val channelAdapter = ChannelRecyclerAdapter()
 
     private val channelViewModel: ChannelListViewModel by viewModel()
+
+    private val deleteChannelDialog = CustomAlertDialog()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +66,9 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
             }
 
             is ViewFragmentState.Content<*> -> {
+                if (deleteChannelDialog.isAdded)
+                    deleteChannelDialog.dismiss()
+
                 (it.value as? List<Channel>)?.let {
                     if (it.isEmpty()) {
                         emptyChannelsLayout?.visibility = View.VISIBLE
@@ -127,10 +128,10 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun showDeletingAlertDialog(channelId: String) {
-        val dialog = CustomAlertDialog()
 
-        dialog.show(childFragmentManager, "channel_deleting") {
-            dialog.apply {
+
+        deleteChannelDialog.show(childFragmentManager, "channel_deleting") {
+            deleteChannelDialog.apply {
                 negativeButton?.text = "Отменить"
                 negativeButton?.setOnClickListener {
                     dismiss()
@@ -149,7 +150,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private val deletingChannelObserver = Observer<Boolean> {
-
+        deleteChannelDialog?.dismiss()
     }
 
     @ExperimentalCoroutinesApi
@@ -209,7 +210,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
     private fun manageQrResult() {
         findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-            when(get<Int>(SCAN_RESULT)) {
+            when (get<Int>(SCAN_RESULT)) {
                 RESULT_OK -> doOnSuccessQrResult(this)
                 RESULT_ERROR -> doOnFailureQrResult(this)
             }

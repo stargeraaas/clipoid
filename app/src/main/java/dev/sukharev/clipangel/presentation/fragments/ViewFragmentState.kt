@@ -9,4 +9,5 @@ sealed class ViewFragmentState {
     class Failure(val title: String?, val subtitle: String? = null,
                             val submitText: String? = null, val iconRes: Int? = null) : ViewFragmentState()
 
+    class ChannelIsDeleted: ViewFragmentState()
 }

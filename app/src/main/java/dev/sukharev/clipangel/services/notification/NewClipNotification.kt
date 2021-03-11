@@ -19,7 +19,7 @@ class NewClipNotification(context: Context, private val data: String) : BaseNoti
         val notificationBuilder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setContentTitle("Получен новый клип!")
                 .setContentText(data)
-                .setSmallIcon(R.mipmap.ic_launcher_clipangel_round)
+                .setSmallIcon(R.mipmap.ic_launcher_clipangel_foreground)
                 .addAction(R.drawable.ic_copy, context.getString(R.string.copy), getPendingIntent())
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
