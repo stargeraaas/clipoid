@@ -23,6 +23,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/delete"
+        android:textStyle="bold"
         android:textColor="#EA0808"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,6 +36,7 @@
     <TextView
         android:id="@+id/channel_name"
         style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textColor="@color/pantone_primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

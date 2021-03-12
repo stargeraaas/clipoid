@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
         bottomMenu = findViewById(R.id.bottomNavigationView)
         bottomMenu.setupWithNavController(navController)
         bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
-            number = 1
+//            number = 1
         }
         Firebase.auth.signInAnonymously().addOnSuccessListener {
             println()
