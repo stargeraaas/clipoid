@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -24,7 +25,7 @@ import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.ACTION_U
 class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
 
 
-    private lateinit var bottomMenu: BottomNavigationView
+    private lateinit var bottomMenu: NavigationView
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 10
@@ -49,9 +50,9 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
         navController = navHostFragment.navController
         bottomMenu = findViewById(R.id.bottomNavigationView)
         bottomMenu.setupWithNavController(navController)
-        bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
-//            number = 1
-        }
+//        bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
+////            number = 1
+//        }
         Firebase.auth.signInAnonymously().addOnSuccessListener {
             println()
         }.addOnFailureListener {
