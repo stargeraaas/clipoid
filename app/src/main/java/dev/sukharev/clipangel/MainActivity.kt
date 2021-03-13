@@ -34,9 +34,6 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView, NavDr
 
     lateinit var navController: NavController
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 
     private val copyBroadcast = ClipboardCopyBroadcast()
 
@@ -49,6 +46,8 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView, NavDr
         toolbar = findViewById(R.id.materialToolbar)
         navDrawer = findViewById(R.id.navigationView)
         drawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+
         setSupportActionBar(toolbar)
         registerReceiver(copyBroadcast, IntentFilter(ACTION_UPDATE_NOTIFICATION))
         val navHostFragment =

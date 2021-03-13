@@ -27,17 +27,6 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
     override fun initToolbar(presenter: ToolbarPresenter) {
         presenter.getToolbar()?.apply {
             title = "HELLOW"
-            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_menu)
-            setNavigationIconTint(requireContext().getColor(R.color.pantone_light_green))
-            setNavigationOnClickListener {
-                ListBottomDialogFragment(listOf(
-                        ListBottomDialogFragment.ListItem(100, "Избранное"),
-                        ListBottomDialogFragment.ListItem(101, "Метки"),
-                        ListBottomDialogFragment.ListItem(102, "Метки"),
-                        ListBottomDialogFragment.ListItem(103, "Создать "))
-                ).show(childFragmentManager,
-                        "list_bottom")
-            }
         }
     }
 
