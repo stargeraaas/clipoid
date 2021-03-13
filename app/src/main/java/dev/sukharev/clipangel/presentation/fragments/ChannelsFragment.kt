@@ -50,6 +50,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        getNavDrawer().enabled(false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -102,8 +103,12 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
 
     override fun initToolbar(presenter: ToolbarPresenter) {
-        presenter.setTitle(getString(R.string.my_channels))
         presenter.setBackToHome(false)
+        presenter.getToolbar()?.apply {
+            title = getString(R.string.my_channels)
+            navigationIcon = null
+            invalidate()
+        }
         presenter.show()
     }
 

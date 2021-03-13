@@ -1,16 +1,18 @@
 package dev.sukharev.clipangel.presentation.fragments.cliplist
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
 import dev.sukharev.clipangel.presentation.fragments.BaseFragment
+import dev.sukharev.clipangel.presentation.fragments.bottom.ListBottomDialogFragment
 import org.koin.android.ext.android.inject
 
 
@@ -23,8 +25,20 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
     private val viewModel: ClipListViewModel by inject()
 
     override fun initToolbar(presenter: ToolbarPresenter) {
-        presenter.show()
-        presenter.setTitle("Мои клипы")
+        presenter.getToolbar()?.apply {
+            title = "HELLOW"
+            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_menu)
+            setNavigationIconTint(requireContext().getColor(R.color.pantone_light_green))
+            setNavigationOnClickListener {
+                ListBottomDialogFragment(listOf(
+                        ListBottomDialogFragment.ListItem(100, "Избранное"),
+                        ListBottomDialogFragment.ListItem(101, "Метки"),
+                        ListBottomDialogFragment.ListItem(102, "Метки"),
+                        ListBottomDialogFragment.ListItem(103, "Создать "))
+                ).show(childFragmentManager,
+                        "list_bottom")
+            }
+        }
     }
 
     override fun showBottomNavigation(): Boolean = true
@@ -35,7 +49,9 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         viewModel.clipItemsLiveData.observe(requireActivity(), clipListObserver)
+        getNavDrawer().enabled(true)
     }
 
     override fun onDestroy() {
