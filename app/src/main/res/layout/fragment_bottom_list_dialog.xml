@@ -6,25 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView2"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:padding="16dp"
+    <View
+        android:id="@+id/view3"
+        android:layout_width="80dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_bottom_list"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Category"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_item_recycler"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="@+id/title_bottom_list"
+        app:layout_constraintStart_toStartOf="@+id/title_bottom_list"
+        app:layout_constraintTop_toBottomOf="@+id/title_bottom_list"
         tools:listitem="@layout/material_list_item_single_line" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,14 @@
 package dev.sukharev.clipangel
 
+
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.drawerlayout.widget.DrawerLayout
 
+import android.widget.Button
+import android.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -14,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.presentation.BottomNavView
 import dev.sukharev.clipangel.presentation.NavDrawerPresenter
@@ -25,39 +29,33 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView, NavDr
 
 
     private lateinit var bottomMenu: BottomNavigationView
-    private var navDrawer: NavigationView? = null
-    private var drawerLayout: DrawerLayout? = null
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 10
     }
 
     lateinit var navController: NavController
-
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var materialToolbar: MaterialToolbar
 
     private val copyBroadcast = ClipboardCopyBroadcast()
-
-    private var toolbar: MaterialToolbar?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         App.currentActivity = this
-        toolbar = findViewById(R.id.materialToolbar)
-        navDrawer = findViewById(R.id.navigationView)
-        drawerLayout = findViewById(R.id.drawer_layout)
-        drawerLayout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
-        setSupportActionBar(toolbar)
+        materialToolbar = findViewById(R.id.materialToolbar)
+        setSupportActionBar(materialToolbar)
         registerReceiver(copyBroadcast, IntentFilter(ACTION_UPDATE_NOTIFICATION))
         val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         bottomMenu = findViewById(R.id.bottomNavigationView)
+        drawerLayout = findViewById(R.id.drawer_layout)
         bottomMenu.setupWithNavController(navController)
-        bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
-//            number = 1
-        }
+//        bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
+////            number = 1
+//        }
         Firebase.auth.signInAnonymously().addOnSuccessListener {
             println()
         }.addOnFailureListener {
@@ -80,10 +78,10 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView, NavDr
     }
 
     override fun setToolbar(toolbar: MaterialToolbar) {
-        setSupportActionBar(toolbar)
+
     }
 
-    override fun getToolbar(): MaterialToolbar? = toolbar
+    override fun getToolbar(): MaterialToolbar = materialToolbar
 
     override fun setTitle(text: String?) {
         supportActionBar?.title = text
@@ -99,12 +97,11 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView, NavDr
     }
 
     override fun enabled(state: Boolean) {
-        navDrawer?.isEnabled = state
-        drawerLayout?.isEnabled = state
+
     }
 
     override fun open() {
-        drawerLayout?.open()
+        drawerLayout.open()
     }
 
 

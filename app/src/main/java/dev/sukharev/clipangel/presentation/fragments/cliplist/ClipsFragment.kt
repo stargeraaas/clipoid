@@ -26,7 +26,16 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
 
     override fun initToolbar(presenter: ToolbarPresenter) {
         presenter.getToolbar()?.apply {
-            title = "HELLOW"
+            title = "Список клипов"
+            navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_category)
+            setNavigationIconTint(requireContext().getColor(R.color.pantone_light_green))
+            setNavigationOnClickListener {
+                ListBottomDialogFragment(listOf(
+                        ListBottomDialogFragment.ListItem(100, "Все", R.drawable.ic_list_2),
+                        ListBottomDialogFragment.ListItem(101, "Избранные", R.drawable.ic_star),
+                        ListBottomDialogFragment.ListItem(102, "Защищенные", R.drawable.ic_lock, isSelected = true)),
+                 "Категории").show(childFragmentManager, "list_bottom")
+            }
         }
     }
 
@@ -46,6 +55,10 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.clipItemsLiveData.removeObserver(clipListObserver)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.clip_list, menu)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
