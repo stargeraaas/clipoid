@@ -96,8 +96,6 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     
-    implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'
-
 //    implementation "androidx.camera:camera-view:1.0.0-alpha21"
 
 //    implementation 'com.google.mlkit:barcode-scanning:16.1.1'

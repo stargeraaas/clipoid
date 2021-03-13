@@ -25,7 +25,7 @@ import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.ACTION_U
 class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView {
 
 
-    private lateinit var bottomMenu: NavigationView
+    private lateinit var bottomMenu: BottomNavigationView
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 10
