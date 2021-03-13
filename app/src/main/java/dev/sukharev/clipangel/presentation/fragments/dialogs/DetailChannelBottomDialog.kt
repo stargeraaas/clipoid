@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.domain.channel.models.Channel
-import dev.sukharev.clipangel.utils.toDateFormat1
 import java.util.*
 
 class DetailChannelBottomDialog(val channel: Channel): BottomSheetDialogFragment() {
@@ -23,16 +22,15 @@ class DetailChannelBottomDialog(val channel: Channel): BottomSheetDialogFragment
         }
 
         view.findViewById<TextView>(R.id.created_date_channel_text_view)?.apply {
-            text = context.getString(R.string.created_date).plus(": ")
-                    .plus(channel.createTime.toDateFormat1())
+            text = channel.getFormattedDate()
         }
 
-        view.findViewById<TextView>(R.id.clip_count_text_view)?.apply {
-            text = context.getString(R.string.clip_count).plus(": ").plus(channel.clipCount)
+        view.findViewById<TextView>(R.id.attached_date_channel_text_view)?.apply {
+            text = channel.getFormattedDate()
         }
 
         view.findViewById<TextView>(R.id.identifier_channel_text_view)?.apply {
-            text = context.getString(R.string.identifier).plus(": ").plus(channel.id)
+            text = channel.id
         }
 
         view.findViewById<Button>(R.id.delete_channel_button)?.apply {

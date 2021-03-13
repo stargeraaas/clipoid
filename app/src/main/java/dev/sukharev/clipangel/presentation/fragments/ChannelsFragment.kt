@@ -25,7 +25,6 @@ import dev.sukharev.clipangel.presentation.recycler.ChannelItemVM
 import dev.sukharev.clipangel.presentation.recycler.ChannelRecyclerAdapter
 import dev.sukharev.clipangel.presentation.view.info.InformationView
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
-import dev.sukharev.clipangel.utils.toDateFormat1
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -70,7 +69,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                         devicesRecyclerView?.visibility = View.INVISIBLE
                     } else {
                         channelAdapter.addItems(it.map {
-                            ChannelItemVM(it.id, it.name, it.createTime.toDateFormat1(), it.isDeleted)
+                            ChannelItemVM(it.id, it.name, Date(it.createTime).toString(), it.isDeleted)
                         })
                         emptyChannelsLayout?.visibility = View.INVISIBLE
                         devicesRecyclerView?.visibility = View.VISIBLE

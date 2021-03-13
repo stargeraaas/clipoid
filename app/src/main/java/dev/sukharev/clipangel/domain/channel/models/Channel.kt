@@ -8,8 +8,7 @@ data class Channel(
         val name: String,
         val secureKey: String,
         val createTime: Long,
-        val isDeleted: Boolean = false,
-        var clipCount: Int = 0
+        val isDeleted: Boolean = false
 ) {
     fun getFormattedDate(): String {
         return Date(createTime).toString()

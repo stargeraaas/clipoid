@@ -32,7 +32,7 @@ class ClipItemViewHolder(rootView: View):
         dateTextView?.text = model.date
 
         copyButton?.setOnClickListener {
-            model.description.copyInClipboardWithToast(it.context.getString(R.string.copied_alert))
+            model.description.copyInClipboardWithToast("Text copied")
         }
     }
 
