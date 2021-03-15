@@ -13,6 +13,8 @@ import dev.sukharev.clipangel.utils.addCircleRipple
 class SingleListAdapter(private val items: List<ListBottomDialogFragment.ListItem>):
         RecyclerView.Adapter<SingleLineItemViewHolder>() {
 
+    var onItemClickListener: OnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleLineItemViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.material_list_item_single_line, parent, false)
@@ -31,7 +33,7 @@ class SingleListAdapter(private val items: List<ListBottomDialogFragment.ListIte
             holder.text.text = text
 
             holder.itemView.setOnClickListener {
-                println("CLICKED ID $id")
+                onItemClickListener?.onClick(this)
             }
 
             if (isSelected) {
@@ -42,7 +44,9 @@ class SingleListAdapter(private val items: List<ListBottomDialogFragment.ListIte
         }
     }
 
-
+    interface OnItemClickListener {
+        fun onClick(item: ListBottomDialogFragment.ListItem)
+    }
 
     override fun getItemCount(): Int = items.count()
 

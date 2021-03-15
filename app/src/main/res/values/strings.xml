@@ -14,7 +14,15 @@
     <string name="clips">Clips</string>
     <string name="settings">Settings</string>
     <string name="my_channels">My channels</string>
-    <string name="attach_new_channel">attach a new channel</string>
+    <string name="attach_new_channel">Connect to channel</string>
     <string name="no_channels_found">No channels found</string>
     <string name="can_create_new_channel">You can create a new channel right now!</string>
+    <string name="category_all">All clips</string>
+    <string name="category_favorite">Favorite</string>
+    <string name="categoty_protected">Protected clips</string>
+    <string name="categories">Categories</string>
+    <string name="all">all</string>
+    <string name="favorite">Favorite</string>
+    <string name="secured">Protected</string>
+    <string name="no_clips_found">no_clips_found</string>
 </resources>

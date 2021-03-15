@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
 
-class ListBottomDialogFragment(val data: List<ListItem>, val title: String?):
-        BaseBottomDialog<List<ListBottomDialogFragment.ListItem>>(data) {
+class ListBottomDialogFragment(val data: List<ListItem>, val title: String?) : BaseBottomDialog() {
 
     private val adapter = SingleListAdapter(data)
+
+    fun setOnItemClickListener(listener: SingleListAdapter.OnItemClickListener?) {
+        adapter.onItemClickListener = listener
+    }
 
     override fun getLayoutId(): Int = R.layout.fragment_bottom_list_dialog
 

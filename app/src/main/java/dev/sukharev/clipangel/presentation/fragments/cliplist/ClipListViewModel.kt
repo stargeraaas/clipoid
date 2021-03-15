@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.clip.ClipRepository
 import dev.sukharev.clipangel.domain.channel.models.Channel
+import dev.sukharev.clipangel.domain.clip.Clip
 import dev.sukharev.clipangel.domain.models.asSuccess
 import dev.sukharev.clipangel.domain.models.isSuccess
+import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import dev.sukharev.clipangel.utils.toDateFormat1
 import kotlinx.coroutines.*
@@ -31,18 +33,21 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     private val _onDeleteClip: MutableLiveData<Boolean> = MutableLiveData()
     val onDeleteClip: LiveData<Boolean> = _onDeleteClip
 
+    val categoryTypeLiveData = MutableLiveData<Category>(Category.All())
+
+    private val _errorLiveData = MutableLiveData<Throwable>(null)
+    val errorLiveData: LiveData<Throwable> = _errorLiveData
+
+    private val allClips = mutableListOf<Clip>()
+
     fun loadClips() {
         CoroutineScope(Dispatchers.IO).launch {
             clipRepository.getAllWithSubscription()
-                    .catch {
-                        println("ERROR")
-                    }
+                    .catch { e -> _errorLiveData.postValue(e) }
                     .collect { clips ->
-                        _clipItemsLiveData.postValue(clips
-                                .sortedByDescending { it.createdTime }
-                                .map {
-                                    ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.getCreatedTimeWithFormat())
-                                })
+                        allClips.clear()
+                        allClips.addAll(clips)
+                        changeCategoryType(categoryTypeLiveData.value!!)
                     }
         }
     }
@@ -60,8 +65,48 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         }
     }
 
+    fun changeCategoryType(type: Category) {
+        GlobalScope.launch(Dispatchers.Unconfined) {
+            val filteredClipList = when (type) {
+                is Category.All -> {
+                    allClips
+                            .sortedByDescending { it.createdTime }
+                }
+                is Category.Favorite -> {
+                    allClips
+                            .sortedByDescending { it.createdTime }
+                            .filter { it.isFavorite }
+                }
+                is Category.Private -> {
+                    allClips
+                            .sortedByDescending { it.createdTime }
+                            .filter { it.isProtected }
+                }
+            }
+
+            _clipItemsLiveData.postValue(filteredClipList.map {
+                ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.getCreatedTimeWithFormat())
+            })
+
+            categoryTypeLiveData.postValue(type)
+        }
+    }
+
+    private fun filterClipsByCategory(category: Category) {
+        when (category) {
+            is Category.All -> {
+            }
+            is Category.Favorite -> {
+            }
+            is Category.Private -> {
+            }
+        }
+    }
+
     fun copyClip(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
-        clipRepository.getAll().collect {
+        clipRepository.getAll()
+                .catch { e -> _errorLiveData.postValue(e) }
+                .collect {
             it.find { it.id == clipId }?.apply {
                 _copyClipData.postValue(data)
             }
@@ -71,12 +116,11 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     @ExperimentalCoroutinesApi
     fun markAsFavorite(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
         clipRepository.getClipById(clipId)
-                .catch { e -> println(e.printStackTrace()) }
-
+                .catch { e -> _errorLiveData.postValue(e) }
                 .collect {
                     clipRepository.update(it.apply {
                         it.isFavorite = !it.isFavorite
-                    }).catch { e -> println(e.printStackTrace()) }
+                    }).catch { e -> _errorLiveData.postValue(e) }
                             .collect {
                                 getDetailedClipData(it.id)
                             }
@@ -87,7 +131,7 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     fun deleteClip(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
         clipRepository.getClipById(clipId).collect { clip ->
             clipRepository.delete(clip)
-                    .catch { println("ERRR") }
+                    .catch { e -> _errorLiveData.postValue(e) }
                     .onCompletion { _onDeleteClip.postValue(true) }
                     .collect()
         }

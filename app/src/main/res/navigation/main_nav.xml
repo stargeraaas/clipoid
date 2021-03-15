@@ -9,7 +9,7 @@
         android:id="@+id/action_to_devices"
         android:name="dev.sukharev.clipangel.presentation.fragments.ChannelsFragment"
         android:label="DevicesFragment"
-        tools:layout="@layout/fragment_devices">
+        tools:layout="@layout/fragment_channel_list">
         <action
             android:id="@+id/action_devicesFragment_to_attachDeviceFragment"
             app:destination="@id/attachDeviceFragment" />
@@ -18,7 +18,7 @@
         android:id="@+id/action_to_clips"
         android:name="dev.sukharev.clipangel.presentation.fragments.cliplist.ClipsFragment"
         android:label="ClipsFragment"
-        tools:layout="@layout/fragment_clips"/>
+        tools:layout="@layout/fragment_clip_list"/>
     <fragment
         android:id="@+id/attachDeviceFragment"
         android:name="dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment"

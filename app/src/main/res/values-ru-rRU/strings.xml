@@ -18,4 +18,12 @@
     <string name="attach_new_channel">Добавить канал</string>
     <string name="no_channels_found">У вас нет ни одного канала</string>
     <string name="can_create_new_channel">Вы можете добавить его прямо сейчас!</string>
+    <string name="category_all">Все клипы</string>
+    <string name="category_favorite">Избранные клипы</string>
+    <string name="categoty_protected">Защищенные клипы</string>
+    <string name="categories">Категории</string>
+    <string name="all">Все</string>
+    <string name="favorite">Избранные</string>
+    <string name="secured">Защищенные</string>
+    <string name="no_clips_found">Клипов не найдено</string>
 </resources>

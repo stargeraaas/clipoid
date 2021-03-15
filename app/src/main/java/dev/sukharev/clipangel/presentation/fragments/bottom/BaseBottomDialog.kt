@@ -8,9 +8,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelBottomDialog
 
-abstract class BaseBottomDialog<in T>(private val data: T): BottomSheetDialogFragment() {
-
-    protected var onClickListenerCallback: DetailChannelBottomDialog.OnClickListener? = null
+abstract class BaseBottomDialog: BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +27,5 @@ abstract class BaseBottomDialog<in T>(private val data: T): BottomSheetDialogFra
     protected abstract fun getLayoutId(): Int
 
     protected abstract fun initViews(view: View)
-
-    fun setOnClickListener(listener: DetailChannelBottomDialog.OnClickListener) {
-        onClickListenerCallback = listener
-    }
 
 }

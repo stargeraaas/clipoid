@@ -54,7 +54,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_devices, null)
+        return inflater.inflate(R.layout.fragment_channel_list, null)
     }
 
     private val channelStateObserver = Observer<ViewFragmentState> {
@@ -120,11 +120,11 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                 channelViewModel.getChannelById(channelItemVM.id).collect {
                     requireActivity().runOnUiThread {
                         val detainChannelBottomDialog = DetailChannelBottomDialog(it)
-                        detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
+                        detainChannelBottomDialog.onClickListener = object : DetailChannelBottomDialog.OnClickListener{
                             override fun onClick(id: String) {
                                 showDeletingAlertDialog(id)
                             }
-                        })
+                        }
                         detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
                     }
                 }

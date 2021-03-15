@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:visibility="invisible"
         app:buttonText="RETRY REQUEST"
-        app:imageSrc="@drawable/ic_warning"
+        app:imageSrc="@drawable/ic_negative"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:layout_height="match_parent"
         android:visibility="invisible"
         app:buttonText="@string/attach_new_channel"
-        app:imageSrc="@drawable/ic_followers"
+        app:imageSrc="@drawable/ic_no_signal_cross"
         app:subtitleText="@string/can_create_new_channel"
         app:titleText="@string/no_channels_found" />
 

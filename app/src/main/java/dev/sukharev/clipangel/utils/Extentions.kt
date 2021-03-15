@@ -28,7 +28,7 @@ fun String.copyInClipboardWithToast(resId: Int) {
 }
 
 fun Long.toDateFormat1(): String {
-    val pattern = "d MMM yyyy HH:mm:ss"
+    val pattern = "d MMM yyyy HH:mm"
     val locale = Locale.getDefault()
     val simpleDateFormat = SimpleDateFormat(pattern, locale)
     return simpleDateFormat.format(Date(this))
