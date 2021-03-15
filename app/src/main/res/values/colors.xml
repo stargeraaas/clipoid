@@ -20,4 +20,5 @@
     <color name="pantone_light_green">#FBFAF1</color>
     <color name="pantone_orange">#D8574A</color>
     <color name="pantone_desert">#CAAF81</color>
+    <color name="pantone_gray">#9e9e9e</color>
 </resources>

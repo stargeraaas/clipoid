@@ -31,7 +31,7 @@
         android:id="@+id/empty_content_template"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:imageSrc="@drawable/ic_list"
+        app:imageSrc="@drawable/ic_message"
         app:titleText="@string/no_clips_found"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
