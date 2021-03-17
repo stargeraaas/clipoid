@@ -85,7 +85,8 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             }
 
             _clipItemsLiveData.postValue(filteredClipList.map {
-                ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.getCreatedTimeWithFormat())
+                ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.isProtected,
+                        it.getCreatedTimeWithFormat(), it.channelId)
             })
 
             categoryTypeLiveData.postValue(type)

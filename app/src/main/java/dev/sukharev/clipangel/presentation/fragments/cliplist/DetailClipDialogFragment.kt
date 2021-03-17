@@ -13,12 +13,13 @@ import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
+import dev.sukharev.clipangel.presentation.fragments.bottom.BaseBottomDialog
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import java.util.*
 
-class DetailClipDialogFragment(private val clipId: String) : BottomSheetDialogFragment() {
+class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() {
 
     private var channelNameTextView: TextView? = null
     private var createDateTextView: TextView? = null
@@ -55,18 +56,10 @@ class DetailClipDialogFragment(private val clipId: String) : BottomSheetDialogFr
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_fragment_clip_detail, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.dialog_fragment_clip_detail
 
     @ExperimentalCoroutinesApi
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initViews(view: View) {
         channelNameTextView = view.findViewById(R.id.channel_name_text_view)
         createDateTextView = view.findViewById(R.id.create_date_text_view)
         clipDataTextView = view.findViewById(R.id.clip_data_text_view)

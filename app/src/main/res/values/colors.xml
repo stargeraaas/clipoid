@@ -16,6 +16,7 @@
     <color name="black_overlay">#66000000</color>
 
     <color name="pantone_primary">#12465B</color>
+    <color name="pantone_primary_light">#C612465B</color>
     <color name="pantone_second">#D6D3CA</color>
     <color name="pantone_light_green">#FBFAF1</color>
     <color name="pantone_orange">#D8574A</color>

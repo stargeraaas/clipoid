@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_dialog_with_rounded_corners"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -85,14 +86,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:text="@string/copy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/clip_data_text_view"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/clip_data_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
     <Button
         android:id="@+id/delete_button"
@@ -113,5 +114,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Заблокировать"
+        android:backgroundTint="@color/pantone_orange"
+        android:drawableTint="@color/pantone_orange"
+        app:layout_constraintEnd_toEndOf="@+id/clip_data_text_view"
+        app:layout_constraintStart_toStartOf="@+id/clip_data_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/clip_data_text_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

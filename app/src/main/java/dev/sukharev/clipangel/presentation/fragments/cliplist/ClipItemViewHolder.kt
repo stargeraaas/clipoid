@@ -7,7 +7,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
-import org.w3c.dom.Text
 
 
 class ClipItemViewHolder(rootView: View):
@@ -18,6 +17,9 @@ class ClipItemViewHolder(rootView: View):
     private val favoriteIcon: ImageView? = rootView.findViewById(R.id.favorite_icon)
     private val dateTextView: TextView? = rootView.findViewById(R.id.date_clip)
     private val shortDetailContainer: ConstraintLayout? = rootView.findViewById(R.id.short_detail_container)
+    private val padlockIcon: ImageView? = rootView.findViewById(R.id.icon_padlock)
+    private val privateCaptionTextView: TextView? = rootView.findViewById(R.id.private_caption)
+    private val fromCaptionTextView: TextView? = rootView.findViewById(R.id.from_caption)
 
     var onItemClickListener: OnClipItemClickListener? = null
 
@@ -26,21 +28,35 @@ class ClipItemViewHolder(rootView: View):
             onItemClickListener?.onItemClicked(model.id)
         }
 
-        descriptionTextView?.text = model.description
-
         favoriteIcon?.visibility = if (model.isFavorite) View.VISIBLE else View.GONE
         dateTextView?.text = model.date
 
         copyButton?.setOnClickListener {
             model.description.copyInClipboardWithToast(it.context.getString(R.string.copied_alert))
         }
+
+        if (model.isProtected) {
+            padlockIcon?.visibility = View.VISIBLE
+            privateCaptionTextView?.visibility = View.VISIBLE
+            descriptionTextView?.visibility = View.INVISIBLE
+        } else {
+            padlockIcon?.visibility = View.INVISIBLE
+            privateCaptionTextView?.visibility = View.INVISIBLE
+            descriptionTextView?.text = model.description
+        }
+
+        fromCaptionTextView?.text = fromCaptionTextView!!.context.getString(R.string.from)
+                .plus(": ")
+                .plus(model.channelName)
     }
 
     data class Model(
             val id: String,
             val description: String,
             var isFavorite: Boolean,
-            val date: String
+            var isProtected: Boolean,
+            val date: String,
+            val channelName: String
     )
 
 }
