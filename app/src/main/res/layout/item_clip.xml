@@ -47,11 +47,11 @@
 
         <TextView
             android:id="@+id/date_clip"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textColor="@color/pantone_primary"
-            style="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="@+id/description_clip"
             app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -73,12 +73,11 @@
             android:id="@+id/icon_padlock"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="16dp"
-            app:tint="@color/pantone_orange"
-            app:layout_constraintBottom_toTopOf="@+id/date_clip"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/from_caption"
-            app:srcCompat="@drawable/ic_padlock" />
+            app:layout_constraintBottom_toBottomOf="@+id/private_caption"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/private_caption"
+            app:srcCompat="@drawable/ic_padlock"
+            app:tint="@color/pantone_orange" />
 
         <TextView
             android:id="@+id/from_caption"
@@ -97,15 +96,17 @@
 
         <TextView
             android:id="@+id/private_caption"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="Содержимое заблокировано"
             android:textAlignment="center"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="@color/pantone_gray"
-            android:text="Для просмотра содержимого, разблокируйте клип"
+            android:textColor="@color/pantone_orange"
             app:layout_constraintBottom_toTopOf="@+id/imageView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/description_clip"
             app:layout_constraintStart_toEndOf="@+id/icon_padlock"
             app:layout_constraintTop_toBottomOf="@+id/favorite_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>

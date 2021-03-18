@@ -1,17 +1,12 @@
 package dev.sukharev.clipangel.presentation.fragments.cliplist
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.fragments.bottom.BaseBottomDialog
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
@@ -27,6 +22,7 @@ class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() 
     private var favoriteButton: ImageView? = null
     private var copyButton: Button? = null
     private var deleteButton: Button? = null
+    private var protectClipImageView: ImageView? = null
 
     private val viewModel: ClipListViewModel by inject()
 
@@ -66,6 +62,7 @@ class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() 
         favoriteButton = view.findViewById(R.id.favorite_button)
         copyButton = view.findViewById(R.id.copy_button)
         deleteButton = view.findViewById(R.id.delete_button)
+        protectClipImageView = view.findViewById(R.id.protect_clip)
 
         copyButton?.setOnClickListener {
             viewModel.copyClip(clipId)
@@ -77,6 +74,10 @@ class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() 
 
         favoriteButton?.setOnClickListener {
             viewModel.markAsFavorite(clipId)
+        }
+
+        protectClipImageView?.setOnClickListener {
+            viewModel.protectClip(clipId)
         }
 
         viewModel.detailedClip.observe(this, detailedClipObserver)

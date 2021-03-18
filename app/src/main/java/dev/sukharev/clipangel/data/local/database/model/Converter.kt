@@ -7,5 +7,5 @@ fun Clip.mapToEntity(): ClipEntity {
 }
 
 fun ClipEntity.mapToDomain(): Clip {
-    return Clip(id, data, createdDate, deliveredDate, channelId, isFavorite)
+    return Clip(id, data, createdDate, deliveredDate, channelId, isFavorite, isProtected)
 }

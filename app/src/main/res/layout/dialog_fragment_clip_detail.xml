@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/channel_name_text_view"
-        style="@style/TextAppearance.MaterialComponents.Headline4"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -27,19 +27,18 @@
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@+id/favorite_button"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/protect_clip"
         app:layout_constraintTop_toBottomOf="@+id/view2"
         tools:text="Cortex" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="16dp"
         android:tint="#5E5E5E"
-        app:layout_constraintStart_toStartOf="@+id/channel_name_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/channel_name_text_view"
+        app:layout_constraintStart_toStartOf="@+id/protect_clip"
+        app:layout_constraintTop_toBottomOf="@+id/clip_data_text_view"
         app:srcCompat="@drawable/ic_calendar" />
 
     <TextView
@@ -61,24 +60,24 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
-        android:tint="#A5A5A5"
+        app:tint="#A5A5A5"
         app:layout_constraintBottom_toBottomOf="@+id/channel_name_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/channel_name_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        app:srcCompat="@drawable/ic_star_2" />
 
     <TextView
         android:id="@+id/clip_data_text_view"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="0dp"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:minHeight="100dp"
         android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/channel_name_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/channel_name_text_view"
         tools:text="TextView" />
 
     <Button
@@ -86,14 +85,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/copy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/clip_data_text_view"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/delete_button"
@@ -115,16 +114,15 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Заблокировать"
-        android:backgroundTint="@color/pantone_orange"
-        android:drawableTint="@color/pantone_orange"
-        app:layout_constraintEnd_toEndOf="@+id/clip_data_text_view"
-        app:layout_constraintStart_toStartOf="@+id/clip_data_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/clip_data_text_view" />
+    <ImageView
+        android:id="@+id/protect_clip"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:tint="@color/pantone_orange"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/channel_name_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/channel_name_text_view"
+        app:srcCompat="@drawable/ic_padlock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,6 @@ data class ClipEntity(
         @ColumnInfo(name = "data") val data: String,
         @ColumnInfo(name = "delivered_date") val deliveredDate: Long,
         @ColumnInfo(name = "created_date") val createdDate: Long,
-        @ColumnInfo(name = "is_favorite") val isFavorite: Boolean = false,
-        @ColumnInfo(name = "is_protected") val isProtected: Boolean = false
+        @ColumnInfo(name = "is_favorite") var isFavorite: Boolean = false,
+        @ColumnInfo(name = "is_protected") var isProtected: Boolean = false
 )

@@ -59,7 +59,7 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
                     val channelName: String = channels.find { clip.channelId == it.id }?.name
                             ?: "<UNKNOWN>"
                     _detailedClip.postValue(DetailedClipModel(clip.id, channelName,
-                            clip.createdTime.toDateFormat1(), clip.data, clip.isFavorite))
+                            clip.createdTime.toDateFormat1(), clip.data, clip.isFavorite, clip.isProtected))
                 }
             }.collect()
         }
@@ -138,12 +138,21 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         }
     }
 
+    fun protectClip(clipId: String) {
+        GlobalScope.launch {
+            clipRepository.protectClip(clipId)
+                    .catch { e -> e.printStackTrace() }
+                    .collect()
+        }
+    }
+
     data class DetailedClipModel(
             val id: String,
             val channelName: String,
             val createDate: String,
             val data: String,
-            val isFavorite: Boolean
+            val isFavorite: Boolean,
+            val isProtected: Boolean
     )
 
 

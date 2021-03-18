@@ -41,4 +41,12 @@ class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
             }
         }.flowOn(Dispatchers.IO)
     }
+
+    override fun protectClip(clipId: String): Flow<Clip> = flow {
+        clipDao.getClipById(clipId)?.let { entity ->
+            entity.isProtected = true
+            clipDao.insert(entity)
+            emit(entity.mapToDomain())
+        }
+    }.flowOn(Dispatchers.IO)
 }
