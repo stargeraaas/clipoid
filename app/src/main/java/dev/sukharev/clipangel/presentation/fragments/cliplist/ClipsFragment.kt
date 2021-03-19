@@ -5,6 +5,7 @@ import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
@@ -14,6 +15,7 @@ import dev.sukharev.clipangel.presentation.fragments.bottom.ListBottomDialogFrag
 import dev.sukharev.clipangel.presentation.fragments.bottom.SingleListAdapter
 import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.presentation.view.info.InformationView
+import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
 import org.koin.android.ext.android.inject
 
 
@@ -22,6 +24,23 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
     private var emptyClipList: InformationView? = null
     private var errorLayout: InformationView? = null
     private var contentLayout: ConstraintLayout? = null
+
+    private lateinit var mainViewModel: MainViewModel
+
+    private val detailedClipObserver = Observer<ClipListViewModel.DetailedClip> {
+        when (it) {
+            is ClipListViewModel.DetailedClip.Clip -> {
+                DetailClipDialogFragment(it.model).show(childFragmentManager, "clip_detail_bottom_dialog")
+            }
+
+            is ClipListViewModel.DetailedClip.Protect -> {
+                mainViewModel.openBiometryDialogForClip(it.clipId)
+            }
+
+            else -> {}
+        }
+
+    }
 
     private val clipListAdapter = ClipListAdapter().apply {
         onItemCLickListener = this@ClipsFragment
@@ -89,6 +108,7 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         getNavDrawer().enabled(true)
+        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
     private fun setToolbarTitleByCategory(category: Category) {
@@ -122,18 +142,28 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
             setToolbarTitleByCategory(it)
         }
 
+        viewModel.detailedClip.observe(viewLifecycleOwner, detailedClipObserver)
         viewModel.errorLiveData.observe(viewLifecycleOwner, errorObserver)
         viewModel.clipItemsLiveData.observe(viewLifecycleOwner, clipListObserver)
+
+        mainViewModel.permitAccessForClip.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.getDetailedClipData(it, true)
+                mainViewModel.permitAccessForClip.value = null
+            }
+        }
 
         view.findViewById<RecyclerView>(R.id.clip_list_recycler)?.apply {
             layoutManager = LinearLayoutManager(view.context)
             adapter = clipListAdapter
         }
 
+
         viewModel.loadClips()
     }
 
     override fun onItemClicked(id: String) {
-        DetailClipDialogFragment(id).show(childFragmentManager, "clip_detail_bottom_dialog")
+        viewModel.getDetailedClipData(id)
     }
+
 }

@@ -24,8 +24,8 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     private val _clipItemsLiveData: MutableLiveData<List<ClipItemViewHolder.Model>> = MutableLiveData()
     val clipItemsLiveData: LiveData<List<ClipItemViewHolder.Model>> = _clipItemsLiveData
 
-    private val _detailedClip: MutableLiveData<DetailedClipModel> = MutableLiveData()
-    val detailedClip: LiveData<DetailedClipModel> = _detailedClip
+    private val _detailedClip: MutableLiveData<DetailedClip> = MutableLiveData()
+    val detailedClip: LiveData<DetailedClip> = _detailedClip
 
     private val _copyClipData: MutableLiveData<String> = MutableLiveData()
     val copyClipData: LiveData<String> = _copyClipData
@@ -52,14 +52,22 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         }
     }
 
-    fun getDetailedClipData(clipId: String) {
+
+    fun getDetailedClipData(clipId: String, hasAccess: Boolean = false) {
         val job = CoroutineScope(Dispatchers.IO).launch {
             clipRepository.getAll().zip(channelRepository.getAll()) { clips, channels ->
                 clips.find { it.id == clipId }?.let { clip ->
                     val channelName: String = channels.find { clip.channelId == it.id }?.name
                             ?: "<UNKNOWN>"
-                    _detailedClip.postValue(DetailedClipModel(clip.id, channelName,
-                            clip.createdTime.toDateFormat1(), clip.data, clip.isFavorite, clip.isProtected))
+
+                    if (clip.isProtected && !hasAccess)
+                        _detailedClip.postValue(DetailedClip.Protect(clip.id))
+                    else
+                        _detailedClip.postValue(DetailedClip.Clip(
+                                DetailedClipModel(clip.id, channelName,
+                                        clip.createdTime.toDateFormat1(), clip.data,
+                                        clip.isFavorite, clip.isProtected)
+                        ))
                 }
             }.collect()
         }
@@ -155,5 +163,10 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             val isProtected: Boolean
     )
 
+    sealed class DetailedClip {
+        class Clip(val model: DetailedClipModel): DetailedClip()
+        class Protect(val clipId: String): DetailedClip()
+        class Error(val throwable: Throwable): DetailedClip()
+    }
 
 }

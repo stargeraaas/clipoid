@@ -1,5 +1,6 @@
 package dev.sukharev.clipangel.presentation.fragments.cliplist
 
+import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -14,7 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import java.util.*
 
-class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() {
+class DetailClipDialogFragment(private val model: ClipListViewModel.DetailedClipModel) : BaseBottomDialog() {
 
     private var channelNameTextView: TextView? = null
     private var createDateTextView: TextView? = null
@@ -26,16 +27,15 @@ class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() 
 
     private val viewModel: ClipListViewModel by inject()
 
-    private val detailedClipObserver = Observer<ClipListViewModel.DetailedClipModel> {
-        channelNameTextView?.text = it.channelName
-        createDateTextView?.text = it.createDate
-        clipDataTextView?.text = it.data
+    private fun setDetailedClipInfo(clip: ClipListViewModel.DetailedClipModel) {
+        channelNameTextView?.text = clip.channelName
+        createDateTextView?.text = clip.createDate
+        clipDataTextView?.text = clip.data
         favoriteButton?.let { view ->
             val drwbl = view.drawable
-
             DrawableCompat.setTint(drwbl,
                     this@DetailClipDialogFragment.requireContext().getColor(
-                            if (it.isFavorite) R.color.favorite_active else R.color.favorite_inactive)
+                            if (clip.isFavorite) R.color.favorite_active else R.color.favorite_inactive)
             )
             view.setImageDrawable(drwbl)
         }
@@ -65,31 +65,29 @@ class DetailClipDialogFragment(private val clipId: String) : BaseBottomDialog() 
         protectClipImageView = view.findViewById(R.id.protect_clip)
 
         copyButton?.setOnClickListener {
-            viewModel.copyClip(clipId)
+            viewModel.copyClip(model.id)
         }
 
         deleteButton?.setOnClickListener {
-            viewModel.deleteClip(clipId)
+            viewModel.deleteClip(model.id)
         }
 
         favoriteButton?.setOnClickListener {
-            viewModel.markAsFavorite(clipId)
+            viewModel.markAsFavorite(model.id)
         }
 
         protectClipImageView?.setOnClickListener {
-            viewModel.protectClip(clipId)
+            viewModel.protectClip(model.id)
         }
 
-        viewModel.detailedClip.observe(this, detailedClipObserver)
         viewModel.copyClipData.observe(this, copyClipObserver)
         viewModel.onDeleteClip.observe(this, deleteClipObserver)
 
-        viewModel.getDetailedClipData(clipId)
+        setDetailedClipInfo(model)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.detailedClip.removeObserver(detailedClipObserver)
         viewModel.copyClipData.removeObserver(copyClipObserver)
         viewModel.onDeleteClip.removeObserver(deleteClipObserver)
     }

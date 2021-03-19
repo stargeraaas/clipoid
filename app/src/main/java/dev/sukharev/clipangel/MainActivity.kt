@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.biometric.BiometricPrompt
 
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -21,6 +22,7 @@ import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.presentation.BottomNavView
 import dev.sukharev.clipangel.presentation.NavDrawerPresenter
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
+import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.ACTION_UPDATE_NOTIFICATION
 import java.util.concurrent.Executor
@@ -44,9 +46,17 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
 
     private val copyBroadcast = ClipboardCopyBroadcast()
 
+    private lateinit var mainViewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        mainViewModel.openProtectedClipConfirmation.observe(this) {
+            callBiometry()
+        }
+
         App.currentActivity = this
         materialToolbar = findViewById(R.id.materialToolbar)
         setSupportActionBar(materialToolbar)
@@ -57,9 +67,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
         bottomMenu = findViewById(R.id.bottomNavigationView)
         drawerLayout = findViewById(R.id.drawer_layout)
         bottomMenu.setupWithNavController(navController)
-//        bottomMenu.getOrCreateBadge(R.id.action_to_clips).apply {
-////            number = 1
-//        }
+
         Firebase.auth.signInAnonymously().addOnSuccessListener {
             println()
         }.addOnFailureListener {
@@ -79,9 +87,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
                     override fun onAuthenticationSucceeded(
                             result: BiometricPrompt.AuthenticationResult) {
                         super.onAuthenticationSucceeded(result)
-                        Toast.makeText(applicationContext,
-                                "Authentication succeeded!", Toast.LENGTH_SHORT)
-                                .show()
+                        mainViewModel.permitAccessForProtectedClip()
                     }
 
                     override fun onAuthenticationFailed() {
