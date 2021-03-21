@@ -16,6 +16,7 @@ import dev.sukharev.clipangel.presentation.fragments.bottom.SingleListAdapter
 import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.presentation.view.info.InformationView
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
+import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import org.koin.android.ext.android.inject
 
 
@@ -27,22 +28,17 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
 
     private lateinit var mainViewModel: MainViewModel
 
-    private val detailedClipObserver = Observer<ClipListViewModel.DetailedClip> {
-        when (it) {
-            is ClipListViewModel.DetailedClip.Clip -> {
-                DetailClipDialogFragment(it.model).show(childFragmentManager, "clip_detail_bottom_dialog")
-            }
-
-            is ClipListViewModel.DetailedClip.Protect -> {
-                mainViewModel.openBiometryDialogForClip(it.clipId)
-            }
-
-            else -> {}
-        }
-
+    private val detailedClipObserver = Observer<ClipListViewModel.DetailedClipModel> {
+                DetailClipDialogFragment(it).show(childFragmentManager, "clip_detail_bottom_dialog")
     }
 
-    private val clipListAdapter = ClipListAdapter().apply {
+    private val permitClipAccessObserver = Observer<String> {
+        mainViewModel.openBiometryDialogForClip(it)
+    }
+
+    private val clipListAdapter = ClipListAdapter {
+        viewModel.createClipAction(ClipListViewModel.ClipAction.Copy(it, false))
+    }.apply {
         onItemCLickListener = this@ClipsFragment
     }
 
@@ -145,10 +141,24 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
         viewModel.detailedClip.observe(viewLifecycleOwner, detailedClipObserver)
         viewModel.errorLiveData.observe(viewLifecycleOwner, errorObserver)
         viewModel.clipItemsLiveData.observe(viewLifecycleOwner, clipListObserver)
+        viewModel.permitClipAccessLiveData.observe(viewLifecycleOwner, permitClipAccessObserver)
+        viewModel.copyClipData.observe(viewLifecycleOwner) {
+            it.copyInClipboardWithToast(getString(R.string.copied_alert))
+        }
 
         mainViewModel.permitAccessForClip.observe(viewLifecycleOwner) {
-            it?.let {
-                viewModel.getDetailedClipData(it, true)
+            it?.let { clipId ->
+                val action: ClipListViewModel.ClipAction? = viewModel.clipAction.value
+
+                when(action) {
+                    is ClipListViewModel.ClipAction.ShowDetail ->
+                        viewModel.createClipAction(ClipListViewModel.ClipAction.ShowDetail(clipId, true))
+
+                    is ClipListViewModel.ClipAction.Copy -> {
+                        viewModel.copyClip(clipId)
+                    }
+                }
+
                 mainViewModel.permitAccessForClip.value = null
             }
         }
@@ -163,7 +173,7 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
     }
 
     override fun onItemClicked(id: String) {
-        viewModel.getDetailedClipData(id)
+        viewModel.createClipAction(ClipListViewModel.ClipAction.ShowDetail(id, false))
     }
 
 }

@@ -6,10 +6,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
+import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 
 
-class ClipItemViewHolder(rootView: View):
+class ClipItemViewHolder(rootView: View, val clipClick: (clipId: String) -> Unit):
         RecyclerView.ViewHolder(rootView){
 
     private val descriptionTextView: TextView? = rootView.findViewById(R.id.description_clip)
@@ -32,7 +33,7 @@ class ClipItemViewHolder(rootView: View):
         dateTextView?.text = model.date
 
         copyButton?.setOnClickListener {
-            model.description.copyInClipboardWithToast(it.context.getString(R.string.copied_alert))
+            clipClick.invoke(model.id)
         }
 
         if (model.isProtected) {
@@ -42,6 +43,7 @@ class ClipItemViewHolder(rootView: View):
         } else {
             padlockIcon?.visibility = View.INVISIBLE
             privateCaptionTextView?.visibility = View.INVISIBLE
+            descriptionTextView?.visibility = View.VISIBLE
             descriptionTextView?.text = model.description
         }
 

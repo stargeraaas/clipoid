@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
 
-class ClipListAdapter: RecyclerView.Adapter<ClipItemViewHolder>() {
+class ClipListAdapter(val copyClip: (clipId: String) -> Unit): RecyclerView.Adapter<ClipItemViewHolder>() {
 
     private val items = mutableListOf<ClipItemViewHolder.Model>()
 
@@ -13,7 +13,7 @@ class ClipListAdapter: RecyclerView.Adapter<ClipItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClipItemViewHolder {
         val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.item_clip, parent, false)
-        return ClipItemViewHolder(layoutView).apply {
+        return ClipItemViewHolder(layoutView, copyClip).apply {
             this.onItemClickListener = onItemCLickListener
         }
     }

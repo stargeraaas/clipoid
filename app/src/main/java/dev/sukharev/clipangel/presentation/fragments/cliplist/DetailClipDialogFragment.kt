@@ -39,6 +39,15 @@ class DetailClipDialogFragment(private val model: ClipListViewModel.DetailedClip
             )
             view.setImageDrawable(drwbl)
         }
+
+        protectClipImageView?.let { view ->
+            val drwbl = view.drawable
+            DrawableCompat.setTint(drwbl,
+                    this@DetailClipDialogFragment.requireContext().getColor(
+                            if (clip.isProtected) R.color.pantone_orange else R.color.favorite_inactive)
+            )
+            view.setImageDrawable(drwbl)
+        }
     }
 
     private val copyClipObserver = Observer<String> {
@@ -78,6 +87,10 @@ class DetailClipDialogFragment(private val model: ClipListViewModel.DetailedClip
 
         protectClipImageView?.setOnClickListener {
             viewModel.protectClip(model.id)
+        }
+
+        viewModel.detailedClip.observe(viewLifecycleOwner) {
+            setDetailedClipInfo(it)
         }
 
         viewModel.copyClipData.observe(this, copyClipObserver)

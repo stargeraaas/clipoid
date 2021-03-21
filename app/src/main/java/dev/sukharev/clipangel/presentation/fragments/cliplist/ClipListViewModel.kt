@@ -5,12 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.clip.ClipRepository
-import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.clip.Clip
-import dev.sukharev.clipangel.domain.models.asSuccess
-import dev.sukharev.clipangel.domain.models.isSuccess
 import dev.sukharev.clipangel.presentation.models.Category
-import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import dev.sukharev.clipangel.utils.toDateFormat1
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
@@ -24,8 +20,8 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     private val _clipItemsLiveData: MutableLiveData<List<ClipItemViewHolder.Model>> = MutableLiveData()
     val clipItemsLiveData: LiveData<List<ClipItemViewHolder.Model>> = _clipItemsLiveData
 
-    private val _detailedClip: MutableLiveData<DetailedClip> = MutableLiveData()
-    val detailedClip: LiveData<DetailedClip> = _detailedClip
+    private val _detailedClip: MutableLiveData<DetailedClipModel> = MutableLiveData()
+    val detailedClip: LiveData<DetailedClipModel> = _detailedClip
 
     private val _copyClipData: MutableLiveData<String> = MutableLiveData()
     val copyClipData: LiveData<String> = _copyClipData
@@ -40,6 +36,10 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
 
     private val allClips = mutableListOf<Clip>()
 
+    val permitClipAccessLiveData = MutableLiveData<String>()
+
+   val clipAction = MutableLiveData<ClipAction>(null)
+
     fun loadClips() {
         CoroutineScope(Dispatchers.IO).launch {
             clipRepository.getAllWithSubscription()
@@ -53,21 +53,17 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     }
 
 
-    fun getDetailedClipData(clipId: String, hasAccess: Boolean = false) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
+    private fun getDetailedClipData(clipId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
             clipRepository.getAll().zip(channelRepository.getAll()) { clips, channels ->
                 clips.find { it.id == clipId }?.let { clip ->
                     val channelName: String = channels.find { clip.channelId == it.id }?.name
                             ?: "<UNKNOWN>"
-
-                    if (clip.isProtected && !hasAccess)
-                        _detailedClip.postValue(DetailedClip.Protect(clip.id))
-                    else
-                        _detailedClip.postValue(DetailedClip.Clip(
+                        _detailedClip.postValue(
                                 DetailedClipModel(clip.id, channelName,
                                         clip.createdTime.toDateFormat1(), clip.data,
                                         clip.isFavorite, clip.isProtected)
-                        ))
+                        )
                 }
             }.collect()
         }
@@ -150,8 +146,32 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         GlobalScope.launch {
             clipRepository.protectClip(clipId)
                     .catch { e -> e.printStackTrace() }
-                    .collect()
+                    .collect {
+                        getDetailedClipData(it.id)
+                    }
         }
+    }
+
+    fun createClipAction(value: ClipAction?) {
+        clipAction.value = value
+        val clip: Clip? = allClips.find { it.id == value?.clipId }
+
+        clip?.let {
+            if (it.isProtected && value?.isPermit != true) {
+                permitClipAccessLiveData.value = it.id
+                return@let
+            }
+
+            when(value) {
+                is ClipAction.ShowDetail -> getDetailedClipData(value.clipId)
+                is ClipAction.Copy -> copyClip(value.clipId)
+            }
+        }
+    }
+
+    sealed class ClipAction(val clipId: String, val isPermit: Boolean) {
+        class ShowDetail(clipId: String, isPermit: Boolean): ClipAction(clipId, isPermit)
+        class Copy(clipId: String, isPermit: Boolean): ClipAction(clipId, isPermit)
     }
 
     data class DetailedClipModel(

@@ -3,6 +3,7 @@ package dev.sukharev.clipangel.presentation.viewmodels.channellist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListViewModel
 
 class MainViewModel: ViewModel() {
 
