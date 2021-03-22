@@ -63,7 +63,7 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
                 ListBottomDialogFragment.ListItem(Category.Favorite().id, getString(R.string.favorite),
                         R.drawable.ic_star),
                 ListBottomDialogFragment.ListItem(Category.Private().id, getString(R.string.secured),
-                        R.drawable.ic_lock, isSelected = true)
+                        R.drawable.ic_lock)
         )
 
         return ListBottomDialogFragment(items, getString(R.string.categories)).also { dialog ->

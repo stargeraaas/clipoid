@@ -31,6 +31,7 @@ class DetailClipDialogFragment(private val model: ClipListViewModel.DetailedClip
         channelNameTextView?.text = clip.channelName
         createDateTextView?.text = clip.createDate
         clipDataTextView?.text = clip.data
+
         favoriteButton?.let { view ->
             val drwbl = view.drawable
             DrawableCompat.setTint(drwbl,

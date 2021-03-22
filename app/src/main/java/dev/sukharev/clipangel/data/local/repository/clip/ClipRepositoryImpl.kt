@@ -1,5 +1,9 @@
 package dev.sukharev.clipangel.data.local.repository.clip
 
+import android.content.SharedPreferences
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
+import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.data.local.database.dao.ClipDao
 import dev.sukharev.clipangel.data.local.database.model.mapToDomain
 import dev.sukharev.clipangel.data.local.database.model.mapToEntity
@@ -10,10 +14,24 @@ import kotlinx.coroutines.flow.*
 
 class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
 
+    private val preferences: SharedPreferences? = PreferenceManager.getDefaultSharedPreferences(App.app)
+
     override fun create(clip: Clip): Flow<Clip> = flow {
         clipDao.insert(clip.mapToEntity())
+        deleteClips()
         emit(clip)
     }.flowOn(Dispatchers.IO)
+
+    private suspend fun deleteClips() {
+        val notFavoriteClips = clipDao.getAll().sortedByDescending { it.createdDate }
+                .filter { !it.isFavorite }
+
+        val maxClipsCount: Int? = preferences!!.getString("max_count_clip_stored", null)?.toInt()
+        if (maxClipsCount != null && notFavoriteClips.size >= maxClipsCount) {
+            clipDao.delete(notFavoriteClips.last())
+            deleteClips()
+        }
+    }
 
     override fun update(clip: Clip): Flow<Clip> = flow {
         clipDao.insert(clip.mapToEntity())
