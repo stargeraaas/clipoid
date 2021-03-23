@@ -3,7 +3,9 @@ package dev.sukharev.clipangel.services.notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.toBitmap
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.*
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.ACTION_UPDATE_NOTIFICATION
@@ -11,14 +13,16 @@ import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.CLIP_DAT
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.NOTIFICATION_ID_EXTRA
 
 
-class NewClipNotification(context: Context, private val data: String) : BaseNotification(context) {
+class NewClipNotification(context: Context, private val senderName: String,
+                          private val data: String) : BaseNotification(context) {
 
     private val NOTIFICATION_ID = 100
 
     override fun show(): Int {
         val notificationBuilder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                .setContentTitle("Получен новый клип!")
+                .setContentTitle(context.getString(R.string.new_clip_received).format(senderName))
                 .setContentText(data)
+                .setLargeIcon(context.resources.getDrawable(R.mipmap.ic_launcher_clipangel, null).toBitmap(200, 200))
                 .setSmallIcon(R.mipmap.ic_launcher_clipangel_foreground)
                 .addAction(R.drawable.ic_copy, context.getString(R.string.copy), getPendingIntent())
 

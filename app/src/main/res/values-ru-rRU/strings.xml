@@ -28,4 +28,5 @@
     <string name="no_clips_found">Клипов не найдено</string>
     <string name="from">От</string>
     <string name="clip_is_deleted">Клип удален!</string>
+    <string name="new_clip_received">От: %s</string>
 </resources>
