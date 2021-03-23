@@ -51,12 +51,12 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
             setNavigationIconTint(requireContext().getColor(R.color.pantone_light_green))
 
             setNavigationOnClickListener {
-                createCategoryTypesDialog().show(childFragmentManager, "list_bottom")
+                createCategoryTypesDialog(viewModel.categoryTypeLiveData.value!!).show(childFragmentManager, "list_bottom")
             }
         }
     }
 
-    private fun createCategoryTypesDialog(): ListBottomDialogFragment {
+    private fun createCategoryTypesDialog(selectedCategory: Category): ListBottomDialogFragment {
         val items = listOf(
                 ListBottomDialogFragment.ListItem(Category.All().id, getString(R.string.all),
                         R.drawable.ic_list_2),
@@ -65,6 +65,9 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
                 ListBottomDialogFragment.ListItem(Category.Private().id, getString(R.string.secured),
                         R.drawable.ic_lock)
         )
+
+        // Mark category as selected
+        items.find { it.id == selectedCategory.id }?.isSelected = true
 
         return ListBottomDialogFragment(items, getString(R.string.categories)).also { dialog ->
             dialog.setOnItemClickListener(object : SingleListAdapter.OnItemClickListener {

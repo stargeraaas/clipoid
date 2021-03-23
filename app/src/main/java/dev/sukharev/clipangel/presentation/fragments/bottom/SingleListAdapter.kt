@@ -1,14 +1,13 @@
 package dev.sukharev.clipangel.presentation.fragments.bottom
 
-import android.content.res.ColorStateList
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.view.list.SingleLineItemViewHolder
-import dev.sukharev.clipangel.utils.addCircleRipple
 
 class SingleListAdapter(private val items: List<ListBottomDialogFragment.ListItem>):
         RecyclerView.Adapter<SingleLineItemViewHolder>() {
@@ -38,8 +37,14 @@ class SingleListAdapter(private val items: List<ListBottomDialogFragment.ListIte
 
             if (isSelected) {
                 holder.itemView.background = holder.getContext().getDrawable(R.color.pantone_light_green)
+                DrawableCompat.setTint(holder.icon.drawable, holder.getContext().getColor(R.color.pantone_orange))
+                holder.text.setTextColor(holder.getContext().getColor(R.color.pantone_orange))
             } else {
-//                holder.itemView.addCircleRipple()
+                val typedValue = TypedValue()
+                holder.itemView.context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
+                holder.itemView.background = ContextCompat.getDrawable(holder.getContext(), typedValue.resourceId)
+                DrawableCompat.setTint(holder.icon.drawable, holder.getContext().getColor(R.color.pantone_primary))
+                holder.text.setTextColor(holder.getContext().getColor(R.color.pantone_primary))
             }
         }
     }
