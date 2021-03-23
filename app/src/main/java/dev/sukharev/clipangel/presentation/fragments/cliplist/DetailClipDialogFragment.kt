@@ -57,7 +57,7 @@ class DetailClipDialogFragment(private val model: ClipListViewModel.DetailedClip
 
     private val deleteClipObserver = Observer<Boolean> {
         if (it) {
-            Toast.makeText(requireContext(), "Clip was deleted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.clip_is_deleted), Toast.LENGTH_SHORT).show()
             dismiss()
         }
     }

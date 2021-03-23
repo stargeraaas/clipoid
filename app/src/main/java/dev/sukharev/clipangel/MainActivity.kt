@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
     }
 
     lateinit var navController: NavController
+    lateinit var navHostFragment: NavHostFragment
     lateinit var drawerLayout: DrawerLayout
     lateinit var materialToolbar: MaterialToolbar
 
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
         materialToolbar = findViewById(R.id.materialToolbar)
         setSupportActionBar(materialToolbar)
         registerReceiver(copyBroadcast, IntentFilter(ACTION_UPDATE_NOTIFICATION))
-        val navHostFragment =
+        navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         bottomMenu = findViewById(R.id.bottomNavigationView)
@@ -119,7 +120,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
     }
 
     override fun setToolbar(toolbar: MaterialToolbar) {
-
+        setSupportActionBar(toolbar)
     }
 
     fun callBiometry() {
@@ -143,6 +144,13 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
 
     override fun enabled(state: Boolean) {
 
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        navHostFragment.childFragmentManager.fragments.forEach {
+            it.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
     }
 
     override fun open() {

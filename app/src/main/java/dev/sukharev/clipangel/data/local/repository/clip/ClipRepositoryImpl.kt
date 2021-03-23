@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.*
 
 class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
 
-    private val preferences: SharedPreferences? = PreferenceManager.getDefaultSharedPreferences(App.app)
+    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.app)
 
     override fun create(clip: Clip): Flow<Clip> = flow {
         clipDao.insert(clip.mapToEntity())
@@ -26,8 +26,9 @@ class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
         val notFavoriteClips = clipDao.getAll().sortedByDescending { it.createdDate }
                 .filter { !it.isFavorite }
 
-        val maxClipsCount: Int? = preferences!!.getString("max_count_clip_stored", null)?.toInt()
-        if (maxClipsCount != null && notFavoriteClips.size >= maxClipsCount) {
+        val maxClipsCount: Int = preferences.getString("max_count_clip_stored", "0")!!.toInt()
+        if (maxClipsCount > 0 && notFavoriteClips.isNotEmpty() &&
+                notFavoriteClips.size >= maxClipsCount) {
             clipDao.delete(notFavoriteClips.last())
             deleteClips()
         }

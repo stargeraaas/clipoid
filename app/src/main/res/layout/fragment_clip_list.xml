@@ -23,6 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="invisible"
             tools:listitem="@layout/item_clip" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -34,6 +35,7 @@
         app:imageSrc="@drawable/ic_message"
         app:titleText="@string/no_clips_found"
         android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">clipangel-android-client</string>
+    <string name="app_name">Clipoid</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="helper_qr_code_instruction">1. Откройте ClipAngel\n2. Перейдите: Клип -> Clip channel ->
@@ -27,4 +27,5 @@
     <string name="secured">Защищенные</string>
     <string name="no_clips_found">Клипов не найдено</string>
     <string name="from">От</string>
+    <string name="clip_is_deleted">Клип удален!</string>
 </resources>

@@ -5,14 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.clip.ClipRepository
+import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.clip.Clip
 import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.utils.toDateFormat1
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.flow.*
 
 class ClipListViewModel(private val clipRepository: ClipRepository,
                         private val channelRepository: ChannelRepository) : ViewModel() {
@@ -40,14 +38,22 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
 
    val clipAction = MutableLiveData<ClipAction>(null)
 
+    private val channelList = mutableSetOf<Channel>()
+
     fun loadClips() {
         CoroutineScope(Dispatchers.IO).launch {
+            channelRepository.getAll()
+                    .catch { e -> _errorLiveData.postValue(e) }
+                    .collect {
+                        channelList.addAll(it.toSet())
+                    }
+
             clipRepository.getAllWithSubscription()
                     .catch { e -> _errorLiveData.postValue(e) }
                     .collect { clips ->
-                        allClips.clear()
-                        allClips.addAll(clips)
-                        changeCategoryType(categoryTypeLiveData.value!!)
+                            allClips.clear()
+                            allClips.addAll(clips)
+                            changeCategoryType(categoryTypeLiveData.value!!)
                     }
         }
     }
@@ -90,12 +96,14 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
 
             _clipItemsLiveData.postValue(filteredClipList.map {
                 ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.isProtected,
-                        it.getCreatedTimeWithFormat(), it.channelId)
+                        it.getCreatedTimeWithFormat(), getChannelNameById(it.channelId))
             })
 
             categoryTypeLiveData.postValue(type)
         }
     }
+
+    private fun getChannelNameById(id: String) = channelList.find { it.id == id }?.name ?: "Undefined"
 
     private fun filterClipsByCategory(category: Category) {
         when (category) {

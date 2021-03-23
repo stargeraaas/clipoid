@@ -14,28 +14,24 @@ class SettingsFragment: PreferenceFragmentCompat() {
     lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        requireActivity().setTheme(R.style.Preferences)
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
-        (requireActivity() as ToolbarPresenter).apply {
-            this.setTitle("Настройки")
-            this.setBackToHome(false)
-            this.show()
+        (requireActivity() as ToolbarPresenter).let { presenter ->
+            presenter.getToolbar()?.apply {
+                title = getString(R.string.settings)
+                navigationIcon = null
+                presenter.setToolbar(this)
+            }
+            presenter.show()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.settingsLiveData.observe(viewLifecycleOwner) {
-//            val preference: Preference? = findPreference("list_preference_1")
-//            preference?.setOnPreferenceClickListener {
-//                println()
-//                true
-//            }
-//        }
-//
-//        viewModel.getSettings()
+
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
