@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
@@ -16,20 +17,28 @@ import dev.sukharev.clipangel.presentation.fragments.bottom.SingleListAdapter
 import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.presentation.view.info.InformationView
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
+import dev.sukharev.clipangel.utils.SingleRunner
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import org.koin.android.ext.android.inject
 
 
-class ClipsFragment: BaseFragment(), OnClipItemClickListener {
+class ClipsFragment : BaseFragment(), OnClipItemClickListener {
+
+    private val viewModel: ClipListViewModel by inject()
+    private lateinit var mainViewModel: MainViewModel
 
     private var emptyClipList: InformationView? = null
     private var errorLayout: InformationView? = null
     private var contentLayout: ConstraintLayout? = null
 
-    private lateinit var mainViewModel: MainViewModel
+    private val args: ClipsFragmentArgs by navArgs()
+
+    private val errorObserver = Observer<Throwable> {
+        errorLayout?.visibility = if (it == null) View.GONE else View.VISIBLE
+    }
 
     private val detailedClipObserver = Observer<ClipListViewModel.DetailedClipModel> {
-                DetailClipDialogFragment(it).show(childFragmentManager, "clip_detail_bottom_dialog")
+        DetailClipDialogFragment(it).show(childFragmentManager, "clip_detail_bottom_dialog")
     }
 
     private val permitClipAccessObserver = Observer<String> {
@@ -42,7 +51,13 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
         onItemCLickListener = this@ClipsFragment
     }
 
-    private val viewModel: ClipListViewModel by inject()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        getNavDrawer().enabled(true)
+        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+    }
+
 
     override fun initToolbar(presenter: ToolbarPresenter) {
         presenter.getToolbar()?.apply {
@@ -81,14 +96,12 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
         }
     }
 
-
     override fun showBottomNavigation(): Boolean = true
 
-    private val errorObserver = Observer<Throwable> {
-        if (it == null)
-            errorLayout?.visibility = View.GONE
-        else {
-            errorLayout?.visibility = View.VISIBLE
+    private val forceDetailObserver = Observer<String> { id ->
+        id?.let {
+            onItemClicked(it)
+            mainViewModel.forceDetail.value = null
         }
     }
 
@@ -100,15 +113,10 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
             clipListAdapter.setItems(it)
             emptyClipList?.visibility = View.GONE
             contentLayout?.visibility = View.VISIBLE
+            mainViewModel.forceDetail.observe(viewLifecycleOwner, forceDetailObserver)
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-        getNavDrawer().enabled(true)
-        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-    }
 
     private fun setToolbarTitleByCategory(category: Category) {
         getToolbarPresenter().apply {
@@ -126,7 +134,6 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.fragment_clip_list, null)
     }
 
@@ -145,6 +152,7 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
         viewModel.errorLiveData.observe(viewLifecycleOwner, errorObserver)
         viewModel.clipItemsLiveData.observe(viewLifecycleOwner, clipListObserver)
         viewModel.permitClipAccessLiveData.observe(viewLifecycleOwner, permitClipAccessObserver)
+
         viewModel.copyClipData.observe(viewLifecycleOwner) {
             it.copyInClipboardWithToast(getString(R.string.copied_alert))
         }
@@ -153,7 +161,7 @@ class ClipsFragment: BaseFragment(), OnClipItemClickListener {
             it?.let { clipId ->
                 val action: ClipListViewModel.ClipAction? = viewModel.clipAction.value
 
-                when(action) {
+                when (action) {
                     is ClipListViewModel.ClipAction.ShowDetail ->
                         viewModel.createClipAction(ClipListViewModel.ClipAction.ShowDetail(clipId, true))
 

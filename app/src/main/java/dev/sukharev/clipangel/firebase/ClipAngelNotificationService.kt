@@ -30,7 +30,7 @@ class ClipAngelNotificationService : FirebaseMessagingService() {
         GlobalScope.launch {
             createClipCase.create(remoteMessage.data["channel"].toString())
                     .zip(channelRepository.get(remoteMessage.data["channel"].toString())) { clip, channel ->
-                        NewClipNotification(App.app, channel.name, clip.data.trim()).show()
+                        NewClipNotification(App.app, clip.id, channel.name, clip.data.trim()).show()
                     }
                     .catch { e ->
                         handleException(e)

@@ -191,10 +191,4 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             val isProtected: Boolean
     )
 
-    sealed class DetailedClip {
-        class Clip(val model: DetailedClipModel): DetailedClip()
-        class Protect(val clipId: String): DetailedClip()
-        class Error(val throwable: Throwable): DetailedClip()
-    }
-
 }

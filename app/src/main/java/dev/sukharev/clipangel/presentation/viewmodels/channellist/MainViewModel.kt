@@ -16,6 +16,8 @@ class MainViewModel: ViewModel() {
         _openProtectedClipConfirmation.value = clipId
     }
 
+    val forceDetail = MutableLiveData<String>(null)
+
     fun permitAccessForProtectedClip() {
         permitAccessForClip.value = _openProtectedClipConfirmation.value
     }

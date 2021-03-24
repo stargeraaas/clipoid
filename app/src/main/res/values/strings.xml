@@ -28,4 +28,6 @@
     <string name="from">from_caption</string>
     <string name="clip_is_deleted">Clip is deleted!</string>
     <string name="new_clip_received">From %s</string>
+    <string name="cancel">Cancel</string>
+    <string name="unblock_clip">Unblocking clip</string>
 </resources>

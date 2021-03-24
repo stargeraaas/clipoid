@@ -1,5 +1,6 @@
 package dev.sukharev.clipangel.services.notification
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -13,7 +14,7 @@ import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.CLIP_DAT
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.NOTIFICATION_ID_EXTRA
 
 
-class NewClipNotification(context: Context, private val senderName: String,
+class NewClipNotification(context: Context, private val clipId: String, private val senderName: String,
                           private val data: String) : BaseNotification(context) {
 
     private val NOTIFICATION_ID = 100
@@ -25,6 +26,7 @@ class NewClipNotification(context: Context, private val senderName: String,
                 .setLargeIcon(context.resources.getDrawable(R.mipmap.ic_launcher_clipangel, null).toBitmap(200, 200))
                 .setSmallIcon(R.mipmap.ic_launcher_clipangel_foreground)
                 .addAction(R.drawable.ic_copy, context.getString(R.string.copy), getPendingIntent())
+                .setContentIntent(getDeepLinkIntent(clipId))
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
 
@@ -41,4 +43,11 @@ class NewClipNotification(context: Context, private val senderName: String,
 
     private fun getPendingIntent() = PendingIntent.getBroadcast(context, NOTIFICATION_ID,
             getCopyClipIntent(), PendingIntent.FLAG_ONE_SHOT)
+
+    private fun getDeepLinkIntent(clipId: String): PendingIntent {
+        return PendingIntent.getActivity(context, 1599, Intent("com.clipoid.OPEN_DETAILED_CLIP").apply {
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra("CLIP_ID", clipId)
+        }, PendingIntent.FLAG_ONE_SHOT)
+    }
 }

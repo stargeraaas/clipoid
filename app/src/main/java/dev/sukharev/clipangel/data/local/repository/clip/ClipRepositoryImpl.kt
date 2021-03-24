@@ -28,7 +28,7 @@ class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
 
         val maxClipsCount: Int = preferences.getString("max_count_clip_stored", "0")!!.toInt()
         if (maxClipsCount > 0 && notFavoriteClips.isNotEmpty() &&
-                notFavoriteClips.size >= maxClipsCount) {
+                notFavoriteClips.size > maxClipsCount) {
             clipDao.delete(notFavoriteClips.last())
             deleteClips()
         }

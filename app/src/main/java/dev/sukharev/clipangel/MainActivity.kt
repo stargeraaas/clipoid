@@ -1,6 +1,7 @@
 package dev.sukharev.clipangel
 
 
+import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,9 +23,12 @@ import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.presentation.BottomNavView
 import dev.sukharev.clipangel.presentation.NavDrawerPresenter
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
+import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipsFragment
+import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipsFragmentArgs
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast
 import dev.sukharev.clipangel.services.ClipboardCopyBroadcast.Companion.ACTION_UPDATE_NOTIFICATION
+import kotlinx.coroutines.NonCancellable.cancel
 import java.util.concurrent.Executor
 
 class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
@@ -70,11 +74,10 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
         bottomMenu.setupWithNavController(navController)
 
         Firebase.auth.signInAnonymously().addOnSuccessListener {
-            println()
+//            Toast.makeText(this, "FB auth success", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
-            println()
+            Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
         }
-
 
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(this, executor,
@@ -93,17 +96,15 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-                        Toast.makeText(applicationContext, "Authentication failed",
-                                Toast.LENGTH_SHORT)
-                                .show()
                     }
                 })
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Разблокировка клипа")
-                .setNegativeButtonText("Отменить")
+                .setTitle(getString(R.string.unblock_clip))
+                .setNegativeButtonText(getString(R.string.cancel))
                 .build()
 
+        checkIntentOnForceDetailedClip(intent)
     }
 
     override fun show() {
@@ -146,6 +147,11 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
 
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        checkIntentOnForceDetailedClip(intent)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         navHostFragment.childFragmentManager.fragments.forEach {
@@ -157,5 +163,14 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
         drawerLayout.open()
     }
 
+    private fun checkIntentOnForceDetailedClip(intent: Intent?) {
+        intent?.let {
+            val args = ClipsFragmentArgs(intent.getStringExtra("CLIP_ID"))
+            mainViewModel.forceDetail.value = args.detailedClipId
+            if (navController.currentDestination?.id == R.id.action_to_devices) {
+                navController.navigate(R.id.action_action_to_devices_to_action_to_clips, args.toBundle())
+            }
+        }
+    }
 
 }

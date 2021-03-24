@@ -5,6 +5,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'kotlinx-serialization'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 def apikeyPropertiesFile = rootProject.file("secure.properties")
@@ -25,8 +26,8 @@ android {
         applicationId "com.clipangel.app"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "1.0.9"
 
         buildConfigField("String", "CLIPANGEL_AES_IV", apikeyProperties['CLIPANGEL_AES_IV'])
 
