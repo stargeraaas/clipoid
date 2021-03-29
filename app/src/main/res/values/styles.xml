@@ -13,9 +13,6 @@
     </style>
 
     <style name="ClipAngel.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="colorPrimary">@color/design_default_color_primary</item>
-        <item name="colorPrimaryVariant">@color/design_default_color_primary</item>
-        <item name="colorOnPrimary">@color/design_default_color_primary</item>
         <item name="colorControlNormal">#FFFFFF</item>
     </style>
 
@@ -26,6 +23,8 @@
 
     <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ClipAngel.App.Toolbar</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="colorAccent">@color/white</item>
     </style>
 
     <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
@@ -48,10 +47,14 @@
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+<!--        <item name="android:windowIsFloating">false</item>-->
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
 

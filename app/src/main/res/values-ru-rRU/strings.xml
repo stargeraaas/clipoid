@@ -31,4 +31,6 @@
     <string name="new_clip_received">От: %s</string>
     <string name="cancel">Отменить</string>
     <string name="unblock_clip">Разблокировать клип</string>
+    <string name="search">Поиск</string>
+    <string name="search_hint">Введите текст \.\.\.</string>
 </resources>

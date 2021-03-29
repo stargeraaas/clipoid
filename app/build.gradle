@@ -26,8 +26,8 @@ android {
         applicationId "com.clipangel.app"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 10
+        versionName "1.0.10"
 
         buildConfigField("String", "CLIPANGEL_AES_IV", apikeyProperties['CLIPANGEL_AES_IV'])
 

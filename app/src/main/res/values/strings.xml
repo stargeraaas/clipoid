@@ -30,4 +30,6 @@
     <string name="new_clip_received">From %s</string>
     <string name="cancel">Cancel</string>
     <string name="unblock_clip">Unblocking clip</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Type some text \.\.\.</string>
 </resources>

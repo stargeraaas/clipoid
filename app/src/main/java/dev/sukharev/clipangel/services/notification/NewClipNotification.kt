@@ -26,6 +26,7 @@ class NewClipNotification(context: Context, private val clipId: String, private 
                 .setLargeIcon(context.resources.getDrawable(R.mipmap.ic_launcher_clipangel, null).toBitmap(200, 200))
                 .setSmallIcon(R.mipmap.ic_launcher_clipangel_foreground)
                 .addAction(R.drawable.ic_copy, context.getString(R.string.copy), getPendingIntent())
+                .setAutoCancel(true)
                 .setContentIntent(getDeepLinkIntent(clipId))
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())

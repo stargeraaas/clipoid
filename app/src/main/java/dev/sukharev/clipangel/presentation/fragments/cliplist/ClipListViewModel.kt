@@ -177,6 +177,20 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         }
     }
 
+    private val oldClipItemModels = MutableLiveData<List<ClipItemViewHolder.Model>>(null)
+
+    fun searchByText(newText: String?) {
+        if (oldClipItemModels.value == null)
+            oldClipItemModels.value = _clipItemsLiveData.value
+
+        if (newText.isNullOrEmpty()) {
+            _clipItemsLiveData.value = oldClipItemModels.value
+            oldClipItemModels.value = null
+        } else {
+            _clipItemsLiveData.value = clipItemsLiveData.value?.filter { it.description.startsWith(newText) }
+        }
+    }
+
     sealed class ClipAction(val clipId: String, val isPermit: Boolean) {
         class ShowDetail(clipId: String, isPermit: Boolean): ClipAction(clipId, isPermit)
         class Copy(clipId: String, isPermit: Boolean): ClipAction(clipId, isPermit)

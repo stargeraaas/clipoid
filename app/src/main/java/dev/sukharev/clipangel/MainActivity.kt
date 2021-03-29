@@ -1,6 +1,7 @@
 package dev.sukharev.clipangel
 
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
@@ -53,9 +54,13 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
 
     private lateinit var mainViewModel: MainViewModel
 
+    protected lateinit var notificationManager: NotificationManager
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         mainViewModel.openProtectedClipConfirmation.observe(this) {

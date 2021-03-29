@@ -1,9 +1,15 @@
 package dev.sukharev.clipangel.presentation.fragments.cliplist
 
+import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -17,7 +23,6 @@ import dev.sukharev.clipangel.presentation.fragments.bottom.SingleListAdapter
 import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.presentation.view.info.InformationView
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
-import dev.sukharev.clipangel.utils.SingleRunner
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import org.koin.android.ext.android.inject
 
@@ -128,8 +133,44 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
         }
     }
 
+    private lateinit var searchView: SearchView
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.clip_list, menu)
+        val myActionMenuItem  = menu.findItem(R.id.action_search)
+        val searchActionManager  = (myActionMenuItem.actionView as SearchView).also {
+            searchView = it
+        }
+
+        searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)?.apply {
+            setTextColor(resources.getColor(R.color.pantone_light_green, null))
+            DrawableCompat.setTint(textCursorDrawable!!, resources.getColor(R.color.pantone_light_green, null))
+            setHint(getString(R.string.search_hint))
+            setHintTextColor(resources.getColor(R.color.pantone_light_2, null))
+        }
+
+        searchView.background = null
+
+        searchActionManager.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.searchByText(newText)
+                return true
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+//            R.id.action_find -> {
+//                FilterBottomDialogFragment().show(childFragmentManager, "filter_fragment")
+//            }
+        }
+        return false
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

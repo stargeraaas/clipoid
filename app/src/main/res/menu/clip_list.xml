@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_find"
-        android:title="Filter"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_filter_results"
-        android:iconTint="@color/pantone_light_green"/>
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always|collapseActionView"
+        android:iconTint="@color/pantone_light_green"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:title="@string/search"/>
 </menu>
