@@ -1,6 +1,5 @@
 package dev.sukharev.clipangel.presentation.fragments.cliplist
 
-import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -12,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
@@ -24,6 +22,7 @@ import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.presentation.view.info.InformationView
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
+import dev.sukharev.clipangel.utils.setCursorDrawableColor
 import org.koin.android.ext.android.inject
 
 
@@ -35,8 +34,6 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
     private var emptyClipList: InformationView? = null
     private var errorLayout: InformationView? = null
     private var contentLayout: ConstraintLayout? = null
-
-    private val args: ClipsFragmentArgs by navArgs()
 
     private val errorObserver = Observer<Throwable> {
         errorLayout?.visibility = if (it == null) View.GONE else View.VISIBLE
@@ -66,12 +63,12 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
 
     override fun initToolbar(presenter: ToolbarPresenter) {
         presenter.getToolbar()?.apply {
-            title = "Список клипов"
             navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_category)
             setNavigationIconTint(requireContext().getColor(R.color.pantone_light_green))
 
             setNavigationOnClickListener {
-                createCategoryTypesDialog(viewModel.categoryTypeLiveData.value!!).show(childFragmentManager, "list_bottom")
+                createCategoryTypesDialog(viewModel.categoryTypeLiveData.value!!)
+                        .show(childFragmentManager, "list_bottom")
             }
         }
     }
@@ -133,26 +130,18 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
         }
     }
 
-    private lateinit var searchView: SearchView
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.clip_list, menu)
-        val myActionMenuItem  = menu.findItem(R.id.action_search)
-        val searchActionManager  = (myActionMenuItem.actionView as SearchView).also {
-            searchView = it
+
+        // Get a search view
+        menu.findItem(R.id.action_search)?.apply {
+            initSearchView((actionView as SearchView))
         }
+    }
 
-        searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)?.apply {
-            setTextColor(resources.getColor(R.color.pantone_light_green, null))
-            DrawableCompat.setTint(textCursorDrawable!!, resources.getColor(R.color.pantone_light_green, null))
-            setHint(getString(R.string.search_hint))
-            setHintTextColor(resources.getColor(R.color.pantone_light_2, null))
-        }
-
-        searchView.background = null
-
-        searchActionManager.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun initSearchView(view: SearchView) {
+        view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -162,15 +151,13 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
                 return true
             }
         })
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-//            R.id.action_find -> {
-//                FilterBottomDialogFragment().show(childFragmentManager, "filter_fragment")
-//            }
+        view.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)?.apply {
+            setTextColor(resources.getColor(R.color.pantone_light_green, null))
+            setCursorDrawableColor(resources.getColor(R.color.pantone_light_green, null))
+            hint = getString(R.string.search_hint)
+            setHintTextColor(resources.getColor(R.color.pantone_light_2, null))
         }
-        return false
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -1,5 +1,9 @@
 package dev.sukharev.clipangel.presentation.fragments.cliplist
 
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,12 +48,29 @@ class ClipItemViewHolder(rootView: View, val clipClick: (clipId: String) -> Unit
             padlockIcon?.visibility = View.INVISIBLE
             privateCaptionTextView?.visibility = View.INVISIBLE
             descriptionTextView?.visibility = View.VISIBLE
-            descriptionTextView?.text = model.description
+
+            if (model.selectableText != null) {
+                val spannable = SpannableString(model.description)
+                val start = model.description.indexesOf(model.selectableText!!, true)
+                val stop = if (start.size <= 1) start[0] else start[1]
+                spannable.setSpan(ForegroundColorSpan(Color.RED), start[0], stop, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+                descriptionTextView?.text = spannable
+            } else {
+                descriptionTextView?.text = model.description
+            }
         }
+
 
         fromCaptionTextView?.text = fromCaptionTextView!!.context.getString(R.string.from)
                 .plus(": ")
                 .plus(model.channelName)
+    }
+
+    public fun String?.indexesOf(substr: String, ignoreCase: Boolean = true): List<Int> {
+        return this?.let {
+            val regex = if (ignoreCase) Regex(substr, RegexOption.IGNORE_CASE) else Regex(substr)
+            regex.findAll(this).map { it.range.start }.toList()
+        } ?: emptyList()
     }
 
     data class Model(
@@ -58,7 +79,8 @@ class ClipItemViewHolder(rootView: View, val clipClick: (clipId: String) -> Unit
             var isFavorite: Boolean,
             var isProtected: Boolean,
             val date: String,
-            val channelName: String
+            val channelName: String,
+            var selectableText: String? = null
     )
 
 }

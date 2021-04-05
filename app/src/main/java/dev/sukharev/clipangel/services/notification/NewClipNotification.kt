@@ -23,7 +23,8 @@ class NewClipNotification(context: Context, private val clipId: String, private 
         val notificationBuilder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.new_clip_received).format(senderName))
                 .setContentText(data)
-                .setLargeIcon(context.resources.getDrawable(R.mipmap.ic_launcher_clipangel, null).toBitmap(200, 200))
+                .setLargeIcon(context.resources
+                        .getDrawable(R.drawable.ic_alien_launcher, null).toBitmap(200, 200))
                 .setSmallIcon(R.mipmap.ic_launcher_clipangel_foreground)
                 .addAction(R.drawable.ic_copy, context.getString(R.string.copy), getPendingIntent())
                 .setAutoCancel(true)
@@ -33,9 +34,6 @@ class NewClipNotification(context: Context, private val clipId: String, private 
 
         return NOTIFICATION_ID
     }
-
-    private fun getDataAsSubSequence(data: String): String =
-            if (data.length < 150) data else data.subSequence(0, 150).toString()
 
     private fun getCopyClipIntent() = Intent(ACTION_UPDATE_NOTIFICATION).apply {
         putExtra(CLIP_DATA_EXTRA, this@NewClipNotification.data)

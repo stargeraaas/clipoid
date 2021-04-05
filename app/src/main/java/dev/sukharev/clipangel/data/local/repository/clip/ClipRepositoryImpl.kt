@@ -7,12 +7,14 @@ import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.data.local.database.dao.ClipDao
 import dev.sukharev.clipangel.data.local.database.model.mapToDomain
 import dev.sukharev.clipangel.data.local.database.model.mapToEntity
+import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.domain.clip.Clip
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
-class ClipRepositoryImpl(private val clipDao: ClipDao) : ClipRepository {
+class ClipRepositoryImpl(private val clipDao: ClipDao,
+                         private val channelRepository: ChannelRepository) : ClipRepository {
 
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.app)
 

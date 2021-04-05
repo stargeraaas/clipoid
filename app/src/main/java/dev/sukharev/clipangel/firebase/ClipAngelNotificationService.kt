@@ -6,7 +6,7 @@ import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.credentials.Credentials
 import dev.sukharev.clipangel.data.remote.repository.clip.NoClipDataInDatabaseException
-import dev.sukharev.clipangel.domain.clip.create.CreateClipCase
+import dev.sukharev.clipangel.domain.clip.create.CreateClipInteractor
 import dev.sukharev.clipangel.services.notification.ErrorNotification
 import dev.sukharev.clipangel.services.notification.NewClipNotification
 import dev.sukharev.clipangel.services.notification.Notification
@@ -22,13 +22,13 @@ class ClipAngelNotificationService : FirebaseMessagingService() {
 
     private val credentials: Credentials by inject()
 
-    private val createClipCase: CreateClipCase by inject()
+    private val createClipInteractor: CreateClipInteractor by inject()
     private val channelRepository: ChannelRepository by inject()
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         GlobalScope.launch {
-            createClipCase.create(remoteMessage.data["channel"].toString())
+            createClipInteractor.create(remoteMessage.data["channel"].toString())
                     .zip(channelRepository.get(remoteMessage.data["channel"].toString())) { clip, channel ->
                         NewClipNotification(App.app, clip.id, channel.name, clip.data.trim()).show()
                     }

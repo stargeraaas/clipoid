@@ -187,7 +187,10 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             _clipItemsLiveData.value = oldClipItemModels.value
             oldClipItemModels.value = null
         } else {
-            _clipItemsLiveData.value = clipItemsLiveData.value?.filter { it.description.startsWith(newText) }
+            _clipItemsLiveData.value = clipItemsLiveData.value?.
+            filter { it.description.startsWith(newText) }?.onEach {
+                it.selectableText = newText
+            }
         }
     }
 

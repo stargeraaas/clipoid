@@ -2,8 +2,8 @@
     <string name="app_name">Clipoid</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="helper_qr_code_instruction">1. Откройте ClipAngel\n2. Перейдите: Клип -> Clip channel ->
-        Connect recipient\n3. Установите флажок в позицию show\n4. Отсканируйте QR код</string>
+    <string name="helper_qr_code_instruction">1. Open ClipAngel\n2. Move to: Clip -> Clip channel ->
+        Connect recipient\n3. Set flag in show position\n4. Scan QR code</string>
     <string name="copied_alert">Clip was copied</string>
     <string name="copy">Copy</string>
     <string name="created_date">Created date</string>

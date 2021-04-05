@@ -17,7 +17,8 @@ class ErrorNotification(context: Context, val title: String, val message: String
         val notificationBuilder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setLargeIcon(context.resources.getDrawable(R.drawable.ic_warning, null).toBitmap(100, 100))
+                .setLargeIcon(context.resources.getDrawable(R.drawable.ic_warning, null)
+                        .toBitmap(100, 100))
                 .setSmallIcon(R.mipmap.ic_launcher_clipangel_foreground)
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
