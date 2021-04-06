@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="Хранение">
+        <ListPreference
+            app:defaultValue="0"
+            app:iconSpaceReserved="false"
+            android:key="max_count_clip_stored"
+            app:useSimpleSummaryProvider="true"
+            app:entryValues="@array/clip_count_for_auto_deleting_value"
+            app:entries="@array/clip_count_for_auto_deleting"
+            android:title="Количество хранимых клипов" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

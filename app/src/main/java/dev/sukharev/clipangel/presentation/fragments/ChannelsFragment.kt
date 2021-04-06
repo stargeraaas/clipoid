@@ -1,8 +1,12 @@
 package dev.sukharev.clipangel.presentation.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.NavHostFragment
@@ -50,10 +54,11 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        getNavDrawer().enabled(false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_devices, null)
+        return inflater.inflate(R.layout.fragment_channel_list, null)
     }
 
     private val channelStateObserver = Observer<ViewFragmentState> {
@@ -102,9 +107,13 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
 
     override fun initToolbar(presenter: ToolbarPresenter) {
-        presenter.setTitle(getString(R.string.my_channels))
-        presenter.setBackToHome(false)
-        presenter.show()
+        presenter.getToolbar()?.apply {
+            title = getString(R.string.my_channels)
+            navigationIcon = null
+            setNavigationOnClickListener(null)
+            presenter.setToolbar(this)
+            presenter.show()
+        }
     }
 
     override fun showBottomNavigation(): Boolean = true
@@ -115,11 +124,11 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
                 channelViewModel.getChannelById(channelItemVM.id).collect {
                     requireActivity().runOnUiThread {
                         val detainChannelBottomDialog = DetailChannelBottomDialog(it)
-                        detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
+                        detainChannelBottomDialog.onClickListener = object : DetailChannelBottomDialog.OnClickListener {
                             override fun onClick(id: String) {
                                 showDeletingAlertDialog(id)
                             }
-                        })
+                        }
                         detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
                     }
                 }
@@ -225,6 +234,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun doOnFailureQrResult(state: SavedStateHandle) {
+        // TODO: вывести ошибку
         println(state.get<String>(RESULT_ERROR_MESSAGE))
     }
 
@@ -235,8 +245,22 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun toAttachNewDevice() {
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.attachDeviceFragment)
+        // TODO: перенести в MainActivity
+        ActivityCompat.requestPermissions(requireActivity(),
+                Array(1) { Manifest.permission.CAMERA },
+                4556);
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            4556 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    NavHostFragment.findNavController(this).navigate(R.id.attachDeviceFragment)
+                }
+            }
+            else -> {}
+        }
     }
 
 

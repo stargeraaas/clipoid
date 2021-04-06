@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import dev.sukharev.clipangel.presentation.BottomNavView
+import dev.sukharev.clipangel.presentation.NavDrawerPresenter
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
 
 
@@ -21,5 +22,7 @@ abstract class BaseFragment: Fragment() {
         initToolbar(getToolbarPresenter())
         getBottomNavPresenter().setVisibility(showBottomNavigation())
     }
+
+    protected fun getNavDrawer() = (requireActivity() as NavDrawerPresenter)
 
 }

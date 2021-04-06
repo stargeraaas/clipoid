@@ -9,4 +9,6 @@ interface ChannelRepository {
     suspend fun delete(id: String): Flow<List<Channel>>
     suspend fun get(id: String): Flow<Channel>
     suspend fun getAll(): Flow<List<Channel>>
+
+    fun getFromCache(id: String): Channel
 }

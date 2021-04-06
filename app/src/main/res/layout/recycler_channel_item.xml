@@ -11,8 +11,6 @@
         android:id="@+id/view4"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:background="@color/pantone_light_green"
         android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"

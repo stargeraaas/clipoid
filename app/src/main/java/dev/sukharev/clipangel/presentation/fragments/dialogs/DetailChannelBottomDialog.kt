@@ -1,31 +1,26 @@
 package dev.sukharev.clipangel.presentation.fragments.dialogs
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.Observer
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.domain.channel.models.Channel
-import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListViewModel
+
+import dev.sukharev.clipangel.presentation.fragments.bottom.BaseBottomDialog
 import dev.sukharev.clipangel.utils.toDateFormat1
-import org.koin.android.ext.android.inject
 import java.util.*
 
-class DetailChannelBottomDialog(val channel: Channel): BottomSheetDialogFragment() {
+class DetailChannelBottomDialog(val channel: Channel): BaseBottomDialog() {
 
-    private var onClickListener: OnClickListener? = null
+    var onClickListener: OnClickListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+    interface OnClickListener {
+        fun onClick(id: String)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.layout_detail_channel_bottom_sheet, container, false)
+    override fun getLayoutId(): Int = R.layout.layout_detail_channel_bottom_sheet
+
+    override fun initViews(view: View) {
         view.findViewById<TextView>(R.id.channel_name)?.apply {
             text = channel.name
         }
@@ -49,16 +44,6 @@ class DetailChannelBottomDialog(val channel: Channel): BottomSheetDialogFragment
                 this@DetailChannelBottomDialog.dismiss()
             }
         }
-
-        return view
-    }
-
-    interface OnClickListener {
-        fun onClick(id: String)
-    }
-
-    fun setOnClickListener(listener: OnClickListener) {
-        onClickListener = listener
     }
 
 }

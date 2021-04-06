@@ -11,4 +11,6 @@ interface ClipRepository {
     fun getClipById(id: String): Flow<Clip>
     fun getAll(): Flow<List<Clip>>
     fun getAllWithSubscription(): Flow<List<Clip>>
+
+    fun protectClip(clipId: String): Flow<Clip>
 }
