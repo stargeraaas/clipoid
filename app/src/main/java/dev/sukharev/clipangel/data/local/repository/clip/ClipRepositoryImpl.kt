@@ -1,7 +1,6 @@
 package dev.sukharev.clipangel.data.local.repository.clip
 
 import android.content.SharedPreferences
-import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import dev.sukharev.clipangel.core.App
 import dev.sukharev.clipangel.data.local.database.dao.ClipDao
@@ -9,9 +8,11 @@ import dev.sukharev.clipangel.data.local.database.model.mapToDomain
 import dev.sukharev.clipangel.data.local.database.model.mapToEntity
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.domain.clip.Clip
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 class ClipRepositoryImpl(private val clipDao: ClipDao,
                          private val channelRepository: ChannelRepository) : ClipRepository {

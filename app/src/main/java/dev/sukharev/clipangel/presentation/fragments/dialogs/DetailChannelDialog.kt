@@ -10,7 +10,7 @@ import dev.sukharev.clipangel.presentation.fragments.bottom.BaseBottomDialog
 import dev.sukharev.clipangel.utils.toDateFormat1
 import java.util.*
 
-class DetailChannelBottomDialog(val channel: Channel): BaseBottomDialog() {
+class DetailChannelDialog(val channel: Channel): BaseBottomDialog() {
 
     var onClickListener: OnClickListener? = null
 
@@ -41,7 +41,7 @@ class DetailChannelBottomDialog(val channel: Channel): BaseBottomDialog() {
         view.findViewById<Button>(R.id.delete_channel_button)?.apply {
             setOnClickListener {
                 onClickListener?.onClick(channel.id)
-                this@DetailChannelBottomDialog.dismiss()
+                this@DetailChannelDialog.dismiss()
             }
         }
     }

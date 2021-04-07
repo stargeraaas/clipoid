@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Clipoid</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="helper_qr_code_instruction">1. Откройте ClipAngel\n2. Перейдите: Клип -> Clip channel ->
         Connect recipient\n3. Установите флажок в позицию show\n4. Отсканируйте QR код</string>
     <string name="copied_alert">Клип скопирован!</string>
@@ -20,7 +18,7 @@
     <string name="can_create_new_channel">Вы можете добавить его прямо сейчас!</string>
     <string name="category_all">Все клипы</string>
     <string name="category_favorite">Избранные клипы</string>
-    <string name="categoty_protected">Защищенные клипы</string>
+    <string name="category_protected">Защищенные клипы</string>
     <string name="categories">Категории</string>
     <string name="all">Все</string>
     <string name="favorite">Избранные</string>
@@ -33,4 +31,8 @@
     <string name="unblock_clip">Разблокировать клип</string>
     <string name="search">Поиск</string>
     <string name="search_hint">Введите текст \.\.\.</string>
+    <string name="unblock_private">Разблокировать все клипы</string>
+    <string name="app_version_text">Версия</string>
+    <string name="about">О приложении</string>
+    <string name="app_device_identifier">Идентификатор устройства</string>
 </resources>

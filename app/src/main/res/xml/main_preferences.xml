@@ -13,6 +13,13 @@
             app:entryValues="@array/clip_count_for_auto_deleting_value"
             app:entries="@array/clip_count_for_auto_deleting"
             android:title="Количество хранимых клипов" />
+
+        <Preference android:title="@string/about"
+            app:iconSpaceReserved="false">
+            <intent
+                android:action="dev.clipoid.action.ABOUT_ACTION"
+                 />
+        </Preference>
     </PreferenceCategory>
 
 

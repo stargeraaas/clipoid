@@ -46,10 +46,6 @@ class InformationView: LinearLayout {
         changeState(viewState)
     }
 
-    init {
-
-    }
-
     fun setOnClickSubmitButtonListener(onClickListener: OnClickListener) {
         submitButton?.setOnClickListener(onClickListener)
     }

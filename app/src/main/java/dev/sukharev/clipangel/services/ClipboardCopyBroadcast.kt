@@ -4,10 +4,8 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat.getSystemService
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.core.App
-import dev.sukharev.clipangel.utils.copyInClipboard
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 
 class ClipboardCopyBroadcast : BroadcastReceiver() {

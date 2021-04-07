@@ -1,4 +1,4 @@
-package dev.sukharev.clipangel.presentation.fragments.cliplist
+package dev.sukharev.clipangel.presentation.fragments.dialogs
 
 import android.view.View
 import android.widget.Button
@@ -9,6 +9,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.fragments.bottom.BaseBottomDialog
+import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListViewModel
 import dev.sukharev.clipangel.utils.copyInClipboardWithToast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject

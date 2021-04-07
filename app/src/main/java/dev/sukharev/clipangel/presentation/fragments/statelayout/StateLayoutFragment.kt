@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.fragments.BaseFragment
 
