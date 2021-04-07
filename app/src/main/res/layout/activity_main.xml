@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/menu_bottom"
-                app:labelVisibilityMode="unlabeled" />
+                app:labelVisibilityMode="selected" />
         </LinearLayout>
 
         <!-- navigation drawer, который появляется слева -->
