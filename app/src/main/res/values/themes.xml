@@ -14,9 +14,6 @@
         <!-- Customize your theme here. -->
 
         <item name="android:preferenceStyle">@style/preference</item>
-
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="ThemeOverlay.Clipoid.FullscreenContainer" parent="">
