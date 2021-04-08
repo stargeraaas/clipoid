@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Регистрация канала"
+        app:title="@string/channel_registration"
         android:elevation="0dp"
         app:navigationIcon="@drawable/ic_cancel"
         app:navigationIconTint="@color/pantone_light_green"
@@ -54,7 +54,7 @@
         android:layout_marginEnd="24dp"
         android:textColor="@color/pantone_light_green"
         style="@style/TextAppearance.MaterialComponents.Headline5"
-        android:text="Отсканируйте QR код"
+        android:text="@string/scan_qr_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qrdecoderview" />

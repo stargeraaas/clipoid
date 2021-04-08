@@ -35,4 +35,16 @@
     <string name="app_version_text">Версия</string>
     <string name="about">О приложении</string>
     <string name="app_device_identifier">Идентификатор устройства</string>
+    <string name="storage_text">Хранение</string>
+    <string name="counting_of_stored_clips">Количество хранимых клипов</string>
+
+    <string name="unlimited">Неограниченное</string>
+    <string name="five_clips">5 клипов</string>
+    <string name="ten_clips">10 клипов</string>
+    <string name="twenty_clips">20 клипов</string>
+
+    <string name="channel_registration">Регистрация канала</string>
+    <string name="scan_qr_code">Отсканируйте QR код</string>
+
+
 </resources>
