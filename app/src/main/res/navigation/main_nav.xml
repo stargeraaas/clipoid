@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/action_to_clips"
-        android:name="dev.sukharev.clipangel.presentation.fragments.cliplist.ClipsFragment"
+        android:name="dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListFragment"
         android:label="ClipsFragment"
         tools:layout="@layout/fragment_clip_list">
         <argument

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.NavHostFragment
@@ -25,7 +24,7 @@ import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Compan
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_OK
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.SCAN_RESULT
 import dev.sukharev.clipangel.presentation.fragments.dialogs.CustomAlertDialog
-import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelBottomDialog
+import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelDialog
 import dev.sukharev.clipangel.presentation.recycler.ChannelItemVM
 import dev.sukharev.clipangel.presentation.recycler.ChannelRecyclerAdapter
 import dev.sukharev.clipangel.presentation.view.info.InformationView
@@ -123,8 +122,8 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
             GlobalScope.launch {
                 channelViewModel.getChannelById(channelItemVM.id).collect {
                     requireActivity().runOnUiThread {
-                        val detainChannelBottomDialog = DetailChannelBottomDialog(it)
-                        detainChannelBottomDialog.onClickListener = object : DetailChannelBottomDialog.OnClickListener {
+                        val detainChannelBottomDialog = DetailChannelDialog(it)
+                        detainChannelBottomDialog.onClickListener = object : DetailChannelDialog.OnClickListener {
                             override fun onClick(id: String) {
                                 showDeletingAlertDialog(id)
                             }
@@ -159,7 +158,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private val deletingChannelObserver = Observer<Boolean> {
-        deleteChannelDialog?.dismiss()
+        deleteChannelDialog.dismiss()
     }
 
     @ExperimentalCoroutinesApi
@@ -248,7 +247,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
         // TODO: перенести в MainActivity
         ActivityCompat.requestPermissions(requireActivity(),
                 Array(1) { Manifest.permission.CAMERA },
-                4556);
+                4556)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -1,16 +1,14 @@
 package dev.sukharev.clipangel.domain.channel
 
-import com.google.firebase.messaging.FirebaseMessaging
 import dev.sukharev.clipangel.data.local.repository.channel.ChannelRepository
 import dev.sukharev.clipangel.data.local.repository.credentials.Credentials
 import dev.sukharev.clipangel.data.remote.repository.channel.ChannelRemoteRepository
 import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.domain.models.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import java.lang.Exception
 
 class ChannelInteractorImpl(val channelRepository: ChannelRepository,
                             val channelRemoteRepository: ChannelRemoteRepository,

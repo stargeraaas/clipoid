@@ -61,10 +61,6 @@ class ChannelItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     private var id: String? = null
 
-    init {
-
-    }
-
     fun bind(model: ChannelItemVM, onClickListeners: List<ChannelRecyclerAdapter.OnItemClickListener>) {
         itemView.setOnClickListener {
             onClickListeners.forEach { it.onItemClicked(model) }

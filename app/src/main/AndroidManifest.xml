@@ -14,12 +14,20 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:name=".core.App"
-        android:theme="@style/Theme.Clipangelandroidclient">
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+        android:theme="@style/Theme.Clipoid.NoActionBar">
+
+        <activity android:name=".presentation.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.clipoid.OPEN_DETAILED_CLIP" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".presentation.AboutActivity">
+            <intent-filter>
+                <action android:name="dev.clipoid.action.ABOUT_ACTION" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

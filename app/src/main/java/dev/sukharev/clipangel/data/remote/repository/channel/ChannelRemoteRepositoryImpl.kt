@@ -1,7 +1,6 @@
 package dev.sukharev.clipangel.data.remote.repository.channel
 
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dev.sukharev.clipangel.data.local.repository.credentials.Credentials
 import dev.sukharev.clipangel.domain.channel.models.Channel
@@ -9,11 +8,9 @@ import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.domain.clip.Clip
 import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,

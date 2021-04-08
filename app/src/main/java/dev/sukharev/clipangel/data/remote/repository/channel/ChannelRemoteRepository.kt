@@ -3,7 +3,6 @@ package dev.sukharev.clipangel.data.remote.repository.channel
 import dev.sukharev.clipangel.domain.channel.models.Channel
 import dev.sukharev.clipangel.domain.channel.models.ChannelCredentials
 import dev.sukharev.clipangel.domain.clip.Clip
-import dev.sukharev.clipangel.domain.models.EmptyResult
 import dev.sukharev.clipangel.domain.models.Result
 import kotlinx.coroutines.flow.Flow
 

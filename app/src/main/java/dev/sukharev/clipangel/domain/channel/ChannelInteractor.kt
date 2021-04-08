@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface ChannelInteractor {
     suspend fun createChannel(credentials: ChannelCredentials): Flow<List<Channel>>
     suspend fun deleteChannel(id: String): Flow<Result<List<Channel>>>
-
     suspend fun getAllChannels(): Flow<Result<List<Channel>>>
-
     suspend fun updateToken(channelId: String, token: String): Flow<Result<EmptyResult>>
 }
 

@@ -8,9 +8,9 @@ sealed class Category(val id: Int) {
 
     companion object {
         fun getById(id: Int): Category? = when (id) {
-            1 -> Category.All()
-            2 -> Category.Favorite()
-            3 -> Category.Private()
+            1 -> All()
+            2 -> Favorite()
+            3 -> Private()
             else -> null
         }
     }

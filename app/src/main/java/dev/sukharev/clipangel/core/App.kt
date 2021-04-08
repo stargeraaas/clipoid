@@ -1,6 +1,5 @@
 package dev.sukharev.clipangel.core
 
-import android.app.Activity
 import android.app.Application
 import androidx.room.Room
 import com.google.firebase.database.DatabaseReference
@@ -24,7 +23,6 @@ import dev.sukharev.clipangel.domain.clip.create.CreateClipInteractor
 import dev.sukharev.clipangel.domain.clip.create.CreateClipInteractorImpl
 import dev.sukharev.clipangel.presentation.fragments.cliplist.ClipListViewModel
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListViewModel
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -34,13 +32,9 @@ import org.koin.dsl.module
 
 class App : Application() {
 
-    private val credentials: Credentials by inject()
-
     companion object {
         lateinit var app: Application
             private set
-
-        var currentActivity: Activity? = null
     }
 
     override fun onCreate() {

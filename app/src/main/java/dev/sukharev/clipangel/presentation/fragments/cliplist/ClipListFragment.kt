@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import dev.sukharev.clipangel.presentation.ToolbarPresenter
 import dev.sukharev.clipangel.presentation.fragments.BaseFragment
 import dev.sukharev.clipangel.presentation.fragments.bottom.ListBottomDialogFragment
 import dev.sukharev.clipangel.presentation.fragments.bottom.SingleListAdapter
+import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailClipDialogFragment
 import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.presentation.view.info.InformationView
 import dev.sukharev.clipangel.presentation.viewmodels.channellist.MainViewModel
@@ -26,7 +26,7 @@ import dev.sukharev.clipangel.utils.setCursorDrawableColor
 import org.koin.android.ext.android.inject
 
 
-class ClipsFragment : BaseFragment(), OnClipItemClickListener {
+class ClipListFragment : BaseFragment(), OnClipItemClickListener {
 
     private val viewModel: ClipListViewModel by inject()
     private lateinit var mainViewModel: MainViewModel
@@ -44,13 +44,13 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
     }
 
     private val permitClipAccessObserver = Observer<String> {
-        mainViewModel.openBiometryDialogForClip(it)
+        mainViewModel.allowAccess(MainViewModel.PermitAccess.Clip(it))
     }
 
     private val clipListAdapter = ClipListAdapter {
         viewModel.createClipAction(ClipListViewModel.ClipAction.Copy(it, false))
     }.apply {
-        onItemCLickListener = this@ClipsFragment
+        onItemCLickListener = this@ClipListFragment
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +59,6 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
         getNavDrawer().enabled(true)
         mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
-
 
     override fun initToolbar(presenter: ToolbarPresenter) {
         presenter.getToolbar()?.apply {
@@ -91,10 +90,18 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
                 override fun onClick(item: ListBottomDialogFragment.ListItem) {
                     Category.getById(item.id)?.also {
                         dialog.dismiss()
-                        viewModel.changeCategoryType(it)
+                        checkCategoryOnPrivate(it)
                     }
                 }
             })
+        }
+    }
+
+    private fun checkCategoryOnPrivate(category: Category) {
+        if (category is Category.Private) {
+            mainViewModel.allowAccess(MainViewModel.PermitAccess.Category())
+        } else {
+            viewModel.changeCategoryType(category)
         }
     }
 
@@ -112,7 +119,7 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
             emptyClipList?.visibility = View.VISIBLE
             contentLayout?.visibility = View.GONE
         } else {
-            clipListAdapter.setItems(it)
+            clipListAdapter.setItems(viewModel.categoryTypeLiveData.value!!, it)
             emptyClipList?.visibility = View.GONE
             contentLayout?.visibility = View.VISIBLE
             mainViewModel.forceDetail.observe(viewLifecycleOwner, forceDetailObserver)
@@ -125,7 +132,7 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
             setTitle(when (category) {
                 is Category.All -> getString(R.string.category_all)
                 is Category.Favorite -> getString(R.string.category_favorite)
-                is Category.Private -> getString(R.string.categoty_protected)
+                is Category.Private -> getString(R.string.category_protected)
             })
         }
     }
@@ -185,20 +192,30 @@ class ClipsFragment : BaseFragment(), OnClipItemClickListener {
             it.copyInClipboardWithToast(getString(R.string.copied_alert))
         }
 
-        mainViewModel.permitAccessForClip.observe(viewLifecycleOwner) {
-            it?.let { clipId ->
-                val action: ClipListViewModel.ClipAction? = viewModel.clipAction.value
+        mainViewModel.accessResult.observe(viewLifecycleOwner) {
+            it?.let {
+                when(it) {
+                    is MainViewModel.PermitAccess.Category -> {
+                        viewModel.changeCategoryType(Category.Private())
+                    }
 
-                when (action) {
-                    is ClipListViewModel.ClipAction.ShowDetail ->
-                        viewModel.createClipAction(ClipListViewModel.ClipAction.ShowDetail(clipId, true))
+                    is MainViewModel.PermitAccess.Clip -> {
+                        val action: ClipListViewModel.ClipAction? = viewModel.clipAction.value
 
-                    is ClipListViewModel.ClipAction.Copy -> {
-                        viewModel.copyClip(clipId)
+                        when (action) {
+                            is ClipListViewModel.ClipAction.ShowDetail ->
+                                viewModel.createClipAction(ClipListViewModel.ClipAction.ShowDetail(it.clipId, true))
+
+                            is ClipListViewModel.ClipAction.Copy -> {
+                                viewModel.copyClip(it.clipId)
+                            }
+
+                            else -> {}
+                        }
                     }
                 }
 
-                mainViewModel.permitAccessForClip.value = null
+                mainViewModel.accessResult.value = null
             }
         }
 

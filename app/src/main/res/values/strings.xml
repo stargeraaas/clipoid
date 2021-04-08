@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Clipoid</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="helper_qr_code_instruction">1. Open ClipAngel\n2. Move to: Clip -> Clip channel ->
         Connect recipient\n3. Set flag in show position\n4. Scan QR code</string>
     <string name="copied_alert">Clip was copied</string>
@@ -19,17 +17,33 @@
     <string name="can_create_new_channel">You can create a new channel right now!</string>
     <string name="category_all">All clips</string>
     <string name="category_favorite">Favorite</string>
-    <string name="categoty_protected">Protected clips</string>
+    <string name="category_protected">Protected clips</string>
     <string name="categories">Categories</string>
-    <string name="all">all</string>
+    <string name="all">All</string>
     <string name="favorite">Favorite</string>
     <string name="secured">Protected</string>
-    <string name="no_clips_found">no_clips_found</string>
+    <string name="no_clips_found">No one clips found</string>
     <string name="from">from_caption</string>
     <string name="clip_is_deleted">Clip is deleted!</string>
     <string name="new_clip_received">From %s</string>
     <string name="cancel">Cancel</string>
-    <string name="unblock_clip">Unblocking clip</string>
+    <string name="unblock_clip">Unblock clip</string>
     <string name="search">Search</string>
     <string name="search_hint">Type some text \.\.\.</string>
+    <string name="unblock_private">Unblock private category</string>
+    <string name="app_version_text">Version</string>
+    <string name="about">About</string>
+    <string name="app_device_identifier">Device identifier</string>
+    <string name="storage_text">Storage</string>
+    <string name="counting_of_stored_clips">Counting of stored clips</string>
+
+    <string name="unlimited">Unlimited</string>
+    <string name="five_clips">5 clips</string>
+    <string name="ten_clips">10 clips</string>
+    <string name="twenty_clips">20 clips</string>
+
+    <string name="channel_registration">Channel registration</string>
+    <string name="scan_qr_code">Scan QR code</string>
+
+
 </resources>

@@ -1,12 +1,10 @@
 package dev.sukharev.clipangel.presentation.fragments
 
 import android.graphics.PointF
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView
 import com.google.android.material.appbar.MaterialToolbar
@@ -16,7 +14,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.lang.Exception
 
 
 class AttachDeviceFragment: BaseFragment(), QRCodeReaderView.OnQRCodeReadListener  {

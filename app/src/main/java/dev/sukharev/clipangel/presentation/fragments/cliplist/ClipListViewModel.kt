@@ -76,7 +76,9 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
     }
 
     fun changeCategoryType(type: Category) {
-        GlobalScope.launch(Dispatchers.Unconfined) {
+        GlobalScope.launch(Dispatchers.IO) {
+            categoryTypeLiveData.postValue(type)
+
             val filteredClipList = when (type) {
                 is Category.All -> {
                     allClips
@@ -98,23 +100,10 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
                 ClipItemViewHolder.Model(it.id, it.data, it.isFavorite, it.isProtected,
                         it.getCreatedTimeWithFormat(), getChannelNameById(it.channelId))
             })
-
-            categoryTypeLiveData.postValue(type)
         }
     }
 
     private fun getChannelNameById(id: String) = channelList.find { it.id == id }?.name ?: "Undefined"
-
-    private fun filterClipsByCategory(category: Category) {
-        when (category) {
-            is Category.All -> {
-            }
-            is Category.Favorite -> {
-            }
-            is Category.Private -> {
-            }
-        }
-    }
 
     fun copyClip(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
         clipRepository.getAll()
@@ -165,7 +154,8 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         val clip: Clip? = allClips.find { it.id == value?.clipId }
 
         clip?.let {
-            if (it.isProtected && value?.isPermit != true) {
+            if (categoryTypeLiveData.value !is Category.Private &&
+                    it.isProtected && value?.isPermit != true) {
                 permitClipAccessLiveData.value = it.id
                 return@let
             }
@@ -187,9 +177,9 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             _clipItemsLiveData.value = oldClipItemModels.value
             oldClipItemModels.value = null
         } else {
-            _clipItemsLiveData.value = clipItemsLiveData.value?.
+            _clipItemsLiveData.value = oldClipItemModels.value?.
             filter { it.description.startsWith(newText) }?.onEach {
-                it.selectableText = newText
+//                it.selectableText = newText
             }
         }
     }
