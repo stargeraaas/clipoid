@@ -34,4 +34,16 @@
     <string name="app_version_text">Version</string>
     <string name="about">About</string>
     <string name="app_device_identifier">Device identifier</string>
+    <string name="storage_text">Storage</string>
+    <string name="counting_of_stored_clips">Counting of stored clips</string>
+
+    <string name="unlimited">Unlimited</string>
+    <string name="five_clips">5 clips</string>
+    <string name="ten_clips">10 clips</string>
+    <string name="twenty_clips">20 clips</string>
+
+    <string name="channel_registration">Channel registration</string>
+    <string name="scan_qr_code">Scan QR code</string>
+
+
 </resources>

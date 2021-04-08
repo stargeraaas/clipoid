@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        android:title="Хранение">
+        android:title="@string/storage_text">
         <ListPreference
             app:defaultValue="0"
             app:iconSpaceReserved="false"
@@ -12,15 +13,30 @@
             app:useSimpleSummaryProvider="true"
             app:entryValues="@array/clip_count_for_auto_deleting_value"
             app:entries="@array/clip_count_for_auto_deleting"
-            android:title="Количество хранимых клипов" />
-
-        <Preference android:title="@string/about"
-            app:iconSpaceReserved="false">
-            <intent
-                android:action="dev.clipoid.action.ABOUT_ACTION"
-                 />
-        </Preference>
+            android:title="@string/counting_of_stored_clips" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/about">
+        <Preference
+            android:key="app_version_text"
+            tools:summary="1.0.10-beta"
+            android:title="@string/app_version_text"
+            app:iconSpaceReserved="false"/>
+        <Preference
+            android:key="app_device_identifier"
+            tools:summary="my test identifier"
+            app:enableCopying="true"
+            android:title="@string/app_device_identifier"
+            app:iconSpaceReserved="false"/>
+        <Preference android:title="Github"
+            android:icon="@drawable/ic_github_logo">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/sergey-sukharev/clipoid"
+                />
+        </Preference>
+    </PreferenceCategory>
 
 </PreferenceScreen>
