@@ -22,7 +22,7 @@
     <string name="all">All</string>
     <string name="favorite">Favorite</string>
     <string name="secured">Protected</string>
-    <string name="no_clips_found">no_clips_found</string>
+    <string name="no_clips_found">No one clips found</string>
     <string name="from">from_caption</string>
     <string name="clip_is_deleted">Clip is deleted!</string>
     <string name="new_clip_received">From %s</string>
