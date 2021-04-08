@@ -2,12 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_dialog_with_rounded_corners"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <View
         android:id="@+id/view2"
-        android:layout_width="150dp"
+        android:layout_width="80dp"
         android:layout_height="3dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/shape"
@@ -17,7 +18,7 @@
 
     <TextView
         android:id="@+id/channel_name_text_view"
-        style="@style/TextAppearance.MaterialComponents.Headline4"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -25,20 +26,20 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/pantone_primary"
         app:layout_constraintEnd_toStartOf="@+id/favorite_button"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/protect_clip"
         app:layout_constraintTop_toBottomOf="@+id/view2"
         tools:text="Cortex" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="24dp"
         android:tint="#5E5E5E"
-        app:layout_constraintStart_toStartOf="@+id/channel_name_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/channel_name_text_view"
+        app:layout_constraintStart_toStartOf="@+id/protect_clip"
+        app:layout_constraintTop_toBottomOf="@+id/clip_data_text_view"
         app:srcCompat="@drawable/ic_calendar" />
 
     <TextView
@@ -60,11 +61,11 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
-        android:tint="#A5A5A5"
+        app:tint="#A5A5A5"
         app:layout_constraintBottom_toBottomOf="@+id/channel_name_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/channel_name_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        app:srcCompat="@drawable/ic_star_2" />
 
     <TextView
         android:id="@+id/clip_data_text_view"
@@ -73,41 +74,43 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:minHeight="100dp"
+        android:isScrollContainer="true"
+        android:maxHeight="360dp"
         android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/channel_name_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/channel_name_text_view"
         tools:text="TextView" />
 
     <Button
         android:id="@+id/copy_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:text="@string/copy"
+        android:textStyle="bold"
+        android:textColor="@color/pantone_primary"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/clip_data_text_view"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/clip_data_text_view"
-        android:text="Copy" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/delete_button"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/delete"
         android:textColor="#D10505"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/clip_data_text_view"
-        app:layout_constraintTop_toTopOf="@+id/copy_button"
-        android:text="Delete" />
+        app:layout_constraintTop_toTopOf="@+id/copy_button" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -115,5 +118,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/protect_clip"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:tint="@color/pantone_orange"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/channel_name_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/channel_name_text_view"
+        app:srcCompat="@drawable/ic_padlock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

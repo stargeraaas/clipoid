@@ -15,7 +15,7 @@ class ChannelRecyclerAdapter : RecyclerView.Adapter<ChannelItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_channel_item, null)
+                .inflate(R.layout.recycler_channel_item, parent, false)
         return ChannelItemViewHolder(itemView)
     }
 
@@ -60,10 +60,6 @@ class ChannelItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private var createDateView: TextView? = itemView.findViewById(R.id.channel_create_date)
 
     private var id: String? = null
-
-    init {
-
-    }
 
     fun bind(model: ChannelItemVM, onClickListeners: List<ChannelRecyclerAdapter.OnItemClickListener>) {
         itemView.setOnClickListener {

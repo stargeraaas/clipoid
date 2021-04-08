@@ -1,8 +1,11 @@
 package dev.sukharev.clipangel.presentation.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.NavHostFragment
@@ -20,7 +23,8 @@ import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Compan
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_ERROR_MESSAGE
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.RESULT_OK
 import dev.sukharev.clipangel.presentation.fragments.AttachDeviceFragment.Companion.SCAN_RESULT
-import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelBottomDialog
+import dev.sukharev.clipangel.presentation.fragments.dialogs.CustomAlertDialog
+import dev.sukharev.clipangel.presentation.fragments.dialogs.DetailChannelDialog
 import dev.sukharev.clipangel.presentation.recycler.ChannelItemVM
 import dev.sukharev.clipangel.presentation.recycler.ChannelRecyclerAdapter
 import dev.sukharev.clipangel.presentation.view.info.InformationView
@@ -28,7 +32,6 @@ import dev.sukharev.clipangel.presentation.viewmodels.channellist.ChannelListVie
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class ChannelsFragment : BaseFragment(), View.OnClickListener {
@@ -44,13 +47,16 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
     private val channelViewModel: ChannelListViewModel by viewModel()
 
+    private val deleteChannelDialog = CustomAlertDialog()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        getNavDrawer().enabled(false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_devices, null)
+        return inflater.inflate(R.layout.fragment_channel_list, null)
     }
 
     private val channelStateObserver = Observer<ViewFragmentState> {
@@ -63,6 +69,9 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
             }
 
             is ViewFragmentState.Content<*> -> {
+                if (deleteChannelDialog.isAdded)
+                    deleteChannelDialog.dismiss()
+
                 (it.value as? List<Channel>)?.let {
                     if (it.isEmpty()) {
                         emptyChannelsLayout?.visibility = View.VISIBLE
@@ -96,9 +105,13 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
 
     override fun initToolbar(presenter: ToolbarPresenter) {
-        presenter.setTitle("Мои устройства")
-        presenter.setBackToHome(false)
-        presenter.show()
+        presenter.getToolbar()?.apply {
+            title = getString(R.string.my_channels)
+            navigationIcon = null
+            setNavigationOnClickListener(null)
+            presenter.setToolbar(this)
+            presenter.show()
+        }
     }
 
     override fun showBottomNavigation(): Boolean = true
@@ -108,17 +121,43 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
             GlobalScope.launch {
                 channelViewModel.getChannelById(channelItemVM.id).collect {
                     requireActivity().runOnUiThread {
-                        val detainChannelBottomDialog = DetailChannelBottomDialog(it)
-                        detainChannelBottomDialog.setOnClickListener(object : DetailChannelBottomDialog.OnClickListener {
+                        val detainChannelBottomDialog = DetailChannelDialog(it)
+                        detainChannelBottomDialog.onClickListener = object : DetailChannelDialog.OnClickListener {
                             override fun onClick(id: String) {
-                                channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(id))
+                                showDeletingAlertDialog(id)
                             }
-                        })
+                        }
                         detainChannelBottomDialog.show(childFragmentManager, "DetailChannelBottomDialog")
                     }
                 }
             }
         }
+    }
+
+    private fun showDeletingAlertDialog(channelId: String) {
+
+
+        deleteChannelDialog.show(childFragmentManager, "channel_deleting") {
+            deleteChannelDialog.apply {
+                negativeButton?.text = "Отменить"
+                negativeButton?.setOnClickListener {
+                    dismiss()
+                }
+                positiveButton?.text = "Да, удалить"
+                positiveButton?.setTextColor(requireContext().getColor(android.R.color.holo_red_dark))
+                positiveButton?.setOnClickListener {
+                    channelViewModel.action(ChannelListViewModel.Action.DeattachChannel(channelId))
+                }
+
+                titleTextView?.text = "Удаление канала"
+                bodyTextView?.text = "При удалении данного канала также будут удалены все связанные с ним клипы"
+            }
+        }
+
+    }
+
+    private val deletingChannelObserver = Observer<Boolean> {
+        deleteChannelDialog.dismiss()
     }
 
     @ExperimentalCoroutinesApi
@@ -178,7 +217,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
 
     private fun manageQrResult() {
         findNavController().currentBackStackEntry?.savedStateHandle?.apply {
-            when(get<Int>(SCAN_RESULT)) {
+            when (get<Int>(SCAN_RESULT)) {
                 RESULT_OK -> doOnSuccessQrResult(this)
                 RESULT_ERROR -> doOnFailureQrResult(this)
             }
@@ -193,6 +232,7 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun doOnFailureQrResult(state: SavedStateHandle) {
+        // TODO: вывести ошибку
         println(state.get<String>(RESULT_ERROR_MESSAGE))
     }
 
@@ -203,8 +243,22 @@ class ChannelsFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun toAttachNewDevice() {
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.attachDeviceFragment)
+        // TODO: перенести в MainActivity
+        ActivityCompat.requestPermissions(requireActivity(),
+                Array(1) { Manifest.permission.CAMERA },
+                4556)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            4556 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    NavHostFragment.findNavController(this).navigate(R.id.attachDeviceFragment)
+                }
+            }
+            else -> {}
+        }
     }
 
 

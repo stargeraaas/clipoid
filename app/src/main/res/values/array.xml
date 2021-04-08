@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="clip_count_for_auto_deleting">
+        <item>@string/unlimited</item>
+        <item>@string/five_clips</item>
+        <item>@string/ten_clips</item>
+        <item>@string/twenty_clips</item>
+    </string-array>
+
+    <string-array name="clip_count_for_auto_deleting_value">
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+    </string-array>
+</resources>

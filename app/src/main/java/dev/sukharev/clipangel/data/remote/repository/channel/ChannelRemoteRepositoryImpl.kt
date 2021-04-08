@@ -1,7 +1,6 @@
 package dev.sukharev.clipangel.data.remote.repository.channel
 
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dev.sukharev.clipangel.data.local.repository.credentials.Credentials
 import dev.sukharev.clipangel.domain.channel.models.Channel
@@ -12,7 +11,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,
@@ -28,15 +26,15 @@ class ChannelRemoteRepositoryImpl(private var firebaseDb: FirebaseDatabase,
             firebaseDb.goOnline()
             firebaseDb.getReference(channel.id).get().addOnSuccessListener { snapshot ->
                 getRecipientsByIdFromDB(channel.id).updateChildren(getFirebaseTokenAndDeviceIdentifier()).addOnCompleteListener {
-                    offer(Result.Success.Value(Channel(channel.id,
+                    offer(Channel(channel.id,
                             snapshot.child(SENDER_NAME_DB_ALIAS).value.toString(),
-                            channel.secret, Date().time)))
+                            channel.secret, Date().time))
                 }.addOnFailureListener {
-                    offer(Result.Failure.Error(it))
+                    close(it)
                 }
             }
         }.addOnFailureListener {
-            offer(Result.Failure.Error(it))
+            close(it)
         }
 
 //        getClipData(channel.id).collect {

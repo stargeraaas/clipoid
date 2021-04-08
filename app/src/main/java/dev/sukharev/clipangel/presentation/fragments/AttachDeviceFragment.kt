@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView
+import com.google.android.material.appbar.MaterialToolbar
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.ToolbarPresenter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.lang.Exception
 
 
 class AttachDeviceFragment: BaseFragment(), QRCodeReaderView.OnQRCodeReadListener  {
@@ -22,7 +22,7 @@ class AttachDeviceFragment: BaseFragment(), QRCodeReaderView.OnQRCodeReadListene
 
     companion object {
         val RESULT_OK = 1
-        val RESULT_CANCELL = 0
+        val RESULT_CANCEL = 0
         val RESULT_ERROR = -1
         val CHANNEL_ID_EXTRA = "CHANNEL_ID_EXTRA"
         val CHANNEL_SECRET_EXTRA = "CHANNEL_SECRET_EXTRA"
@@ -41,13 +41,29 @@ class AttachDeviceFragment: BaseFragment(), QRCodeReaderView.OnQRCodeReadListene
         return inflater.inflate(R.layout.fragment_attach_device, null)
     }
 
+    private var oldSystemNavigationBarColor: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        oldSystemNavigationBarColor = requireActivity().window.navigationBarColor
+        requireActivity().window.navigationBarColor = resources.getColor(R.color.pantone_primary, null)
+
         initQRCodeReader(view)
         getToolbarPresenter().setTitle("Регистрация устройства")
         getToolbarPresenter().setBackToHome(true)
+        view.findViewById<MaterialToolbar>(R.id.toolbar)?.apply {
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+        }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        oldSystemNavigationBarColor?.let {
+            requireActivity().window.navigationBarColor = it
+        }
     }
 
     private fun initQRCodeReader(view: View) {

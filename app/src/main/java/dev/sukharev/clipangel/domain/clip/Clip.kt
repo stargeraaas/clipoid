@@ -9,7 +9,8 @@ data class Clip(
         val deliveredTime: Long,
         val createdTime: Long,
         var channelId: String,
-        var isFavorite: Boolean = false
+        var isFavorite: Boolean = false,
+        var isProtected: Boolean = false,
 ) {
 
     companion object {
@@ -19,6 +20,7 @@ data class Clip(
                 Date().time,
                 createdTime,
                 channelId,
+                false,
                 false
         )
     }

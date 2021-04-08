@@ -1,8 +1,11 @@
 package dev.sukharev.clipangel.utils
 
+import android.R
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.util.TypedValue
+import android.view.View
 import android.widget.Toast
 import dev.sukharev.clipangel.core.App
 import java.text.SimpleDateFormat
@@ -25,8 +28,13 @@ fun String.copyInClipboardWithToast(resId: Int) {
 }
 
 fun Long.toDateFormat1(): String {
-    val pattern = "d MMM yyyy HH:mm:ss"
+    val pattern = "d MMM yyyy HH:mm"
     val locale = Locale.getDefault()
     val simpleDateFormat = SimpleDateFormat(pattern, locale)
     return simpleDateFormat.format(Date(this))
+}
+
+fun View.addCircleRipple() = with(TypedValue()) {
+    context.theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, this, true)
+    setBackgroundResource(resourceId)
 }

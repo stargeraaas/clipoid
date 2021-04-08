@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">clipangel-android-client</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="helper_qr_code_instruction">Чтобы зарегистрировать новое устройство,
-        отсканируйте QR код./&gt;/&gt; Зайдите на</string>
+    <string name="app_name">Clipoid</string>
+    <string name="helper_qr_code_instruction">1. Откройте ClipAngel\n2. Перейдите: Клип -> Clip channel ->
+        Connect recipient\n3. Установите флажок в позицию show\n4. Отсканируйте QR код</string>
     <string name="copied_alert">Клип скопирован!</string>
-    <string name="copy">Скопировать</string>
+    <string name="copy">Копировать</string>
+    <string name="created_date">Дата создания</string>
+    <string name="delete">Удалить</string>
+    <string name="identifier">Идентификатор канала</string>
+    <string name="clip_count">Количество клипов</string>
+    <string name="channels">Каналы</string>
+    <string name="clips">Клипы</string>
+    <string name="settings">Настройки</string>
+    <string name="my_channels">Мои каналы</string>
+    <string name="attach_new_channel">Добавить канал</string>
+    <string name="no_channels_found">У вас нет ни одного канала</string>
+    <string name="can_create_new_channel">Вы можете добавить его прямо сейчас!</string>
+    <string name="category_all">Все клипы</string>
+    <string name="category_favorite">Избранные клипы</string>
+    <string name="category_protected">Защищенные клипы</string>
+    <string name="categories">Категории</string>
+    <string name="all">Все</string>
+    <string name="favorite">Избранные</string>
+    <string name="secured">Защищенные</string>
+    <string name="no_clips_found">Клипов не найдено</string>
+    <string name="from">От</string>
+    <string name="clip_is_deleted">Клип удален!</string>
+    <string name="new_clip_received">От: %s</string>
+    <string name="cancel">Отменить</string>
+    <string name="unblock_clip">Разблокировать клип</string>
+    <string name="search">Поиск</string>
+    <string name="search_hint">Введите текст \.\.\.</string>
+    <string name="unblock_private">Разблокировать все клипы</string>
+    <string name="app_version_text">Версия</string>
+    <string name="about">О приложении</string>
+    <string name="app_device_identifier">Идентификатор устройства</string>
+    <string name="storage_text">Хранение</string>
+    <string name="counting_of_stored_clips">Количество хранимых клипов</string>
+
+    <string name="unlimited">Неограниченное</string>
+    <string name="five_clips">5 клипов</string>
+    <string name="ten_clips">10 клипов</string>
+    <string name="twenty_clips">20 клипов</string>
+
+    <string name="channel_registration">Регистрация канала</string>
+    <string name="scan_qr_code">Отсканируйте QR код</string>
+
+
 </resources>

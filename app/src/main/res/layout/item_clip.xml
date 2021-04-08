@@ -18,38 +18,40 @@
 
         <TextView
             android:id="@+id/description_clip"
-            style="@style/TextAppearance.MaterialComponents.Body1"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/favorite_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Some clip info Some clip info Some clip info Some clip info Some clip info Some clip info" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/from_caption"
+            tools:text="Some clip info Some clip info Some clip info Some clip info Some clip info Some clip info"
+            tools:visibility="invisible" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/description_clip"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description_clip"
             app:srcCompat="@drawable/ic_calendar"
-            app:tint="#5E5E5E" />
+            app:tint="@color/pantone_primary_light" />
 
         <TextView
             android:id="@+id/date_clip"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="#5E5E5E"
+            android:textColor="@color/pantone_primary"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="@+id/description_clip"
             app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -62,10 +64,52 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/description_clip"
+            app:layout_constraintBottom_toBottomOf="@+id/from_caption"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/description_clip"
-            app:srcCompat="@drawable/ic_star" />
+            app:layout_constraintTop_toTopOf="@+id/from_caption"
+            app:srcCompat="@drawable/ic_star_2" />
+
+        <ImageView
+            android:id="@+id/icon_padlock"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/private_caption"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/private_caption"
+            app:srcCompat="@drawable/ic_padlock"
+            app:tint="@color/pantone_orange" />
+
+        <TextView
+            android:id="@+id/from_caption"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="From: ChannelName"
+            android:textColor="@color/pantone_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/favorite_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/private_caption"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="Содержимое заблокировано"
+            android:textAlignment="center"
+            android:textColor="@color/pantone_orange"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="@+id/description_clip"
+            app:layout_constraintStart_toEndOf="@+id/icon_padlock"
+            app:layout_constraintTop_toBottomOf="@+id/from_caption" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -74,23 +118,23 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         app:backgroundTint="@color/white"
-        app:elevation="1dp"
+        app:elevation="0dp"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rippleColor="#EDEDED"
         app:srcCompat="@drawable/ic_copy"
-        app:tint="@color/design_default_color_primary" />
+        app:tint="@color/pantone_primary" />
 
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="#6A6200EE"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="#DFDFDF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

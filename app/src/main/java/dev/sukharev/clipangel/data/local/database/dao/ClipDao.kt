@@ -2,8 +2,8 @@ package dev.sukharev.clipangel.data.local.database.dao
 
 import androidx.room.*
 import dev.sukharev.clipangel.data.local.database.model.ClipEntity
+import dev.sukharev.clipangel.data.local.database.model.ClipWithChannelEntity
 import kotlinx.coroutines.flow.Flow
-import org.jetbrains.annotations.NotNull
 
 @Dao
 interface ClipDao {
@@ -22,4 +22,7 @@ interface ClipDao {
     @Delete
     suspend fun delete(clip: ClipEntity)
 
+    @Transaction
+    @Query("SELECT * FROM clip")
+    fun getClipsWithChannel(): List<ClipWithChannelEntity>
 }
