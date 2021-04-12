@@ -55,7 +55,7 @@ class App : Application() {
     }
 
     val repositories = module {
-        single { ChannelRepositoryImpl(get(), get()) } bind ChannelRepository::class
+        single { ChannelRepositoryImpl(get()) } bind ChannelRepository::class
         single { ChannelRemoteRepositoryImpl(get(), get()) } bind ChannelRemoteRepository::class
         single { CredentialsClipAngel(get()) } bind Credentials::class
         single { ClipRemoteRepositoryImpl(get(), get()) } bind ClipRemoteRepository::class

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.biometric.BiometricPrompt
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -54,6 +56,7 @@ class MainActivity : AppCompatActivity(), ToolbarPresenter, BottomNavView,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
         setContentView(R.layout.activity_main)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 

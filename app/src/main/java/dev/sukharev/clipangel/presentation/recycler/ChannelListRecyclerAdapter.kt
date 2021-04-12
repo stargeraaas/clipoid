@@ -67,7 +67,6 @@ class ChannelItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         }
         id = model.id
         nameView?.text = model.name
-        createDateView?.text = itemView.context.getString(R.string.created_date)
-                .plus(": ").plus(model.createDate)
+        createDateView?.text = model.createDate
     }
 }
