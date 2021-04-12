@@ -178,7 +178,7 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             oldClipItemModels.value = null
         } else {
             _clipItemsLiveData.value = oldClipItemModels.value?.
-            filter { it.description.startsWith(newText) }?.onEach {
+            filter { it.description.contains(newText, true) }?.onEach {
 //                it.selectableText = newText
             }
         }
