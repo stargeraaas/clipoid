@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Clipoid</string>
-    <string name="helper_qr_code_instruction">1. Open ClipAngel\n2. Move to: Clip -> Clip channel ->
-        Connect recipient\n3. Set flag in show position\n4. Scan QR code</string>
+    <string name="helper_qr_code_instruction">1. Open ClipAngel\n2. Move to:
+        "Window - Connect clip channel"\n3. Set flag in show position\n4. Scan QR code</string>
     <string name="copied_alert">Clip was copied</string>
     <string name="copy">Copy</string>
     <string name="created_date">Created date</string>
