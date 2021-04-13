@@ -7,10 +7,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import dev.sukharev.clipangel.R
 import dev.sukharev.clipangel.presentation.models.Category
+import dev.sukharev.clipangel.utils.string.SpannableCropper
 
 
 class ClipItemViewHolder(val provider: CategoryProvider,
-                         rootView: View, val clipClick: (clipId: String) -> Unit) :
+                         private val rootView: View, val clipClick: (clipId: String) -> Unit) :
         RecyclerView.ViewHolder(rootView) {
 
     private val descriptionTextView: TextView? = rootView.findViewById(R.id.description_clip)
@@ -42,11 +43,8 @@ class ClipItemViewHolder(val provider: CategoryProvider,
             descriptionTextView?.visibility = View.VISIBLE
 
             if (model.selectableText != null) {
-//                val spannable = SpannableString(model.description)
-//                val start = model.description.indexesOf(model.selectableText!!, true)
-//                val stop = if (start.size <= 1) start[0] else start[1]
-//                spannable.setSpan(ForegroundColorSpan(Color.RED), start[0], stop, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
-//                descriptionTextView?.text = spannable
+                val spannable = SpannableCropper(rootView.context).span(model.selectableText!!, model.description)
+                descriptionTextView?.text = spannable
             } else {
                 descriptionTextView?.text = model.description
             }

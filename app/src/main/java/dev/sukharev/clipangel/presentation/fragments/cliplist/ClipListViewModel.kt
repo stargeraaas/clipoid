@@ -11,6 +11,8 @@ import dev.sukharev.clipangel.presentation.models.Category
 import dev.sukharev.clipangel.utils.toDateFormat1
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.util.*
+import java.util.Collections.copy
 
 class ClipListViewModel(private val clipRepository: ClipRepository,
                         private val channelRepository: ChannelRepository) : ViewModel() {
@@ -36,7 +38,7 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
 
     val permitClipAccessLiveData = MutableLiveData<String>()
 
-   val clipAction = MutableLiveData<ClipAction>(null)
+    val clipAction = MutableLiveData<ClipAction>(null)
 
     private val channelList = mutableSetOf<Channel>()
 
@@ -51,9 +53,9 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             clipRepository.getAllWithSubscription()
                     .catch { e -> _errorLiveData.postValue(e) }
                     .collect { clips ->
-                            allClips.clear()
-                            allClips.addAll(clips)
-                            changeCategoryType(categoryTypeLiveData.value!!)
+                        allClips.clear()
+                        allClips.addAll(clips)
+                        changeCategoryType(categoryTypeLiveData.value!!)
                     }
         }
     }
@@ -65,11 +67,11 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
                 clips.find { it.id == clipId }?.let { clip ->
                     val channelName: String = channels.find { clip.channelId == it.id }?.name
                             ?: "<UNKNOWN>"
-                        _detailedClip.postValue(
-                                DetailedClipModel(clip.id, channelName,
-                                        clip.createdTime.toDateFormat1(), clip.data,
-                                        clip.isFavorite, clip.isProtected)
-                        )
+                    _detailedClip.postValue(
+                            DetailedClipModel(clip.id, channelName,
+                                    clip.createdTime.toDateFormat1(), clip.data,
+                                    clip.isFavorite, clip.isProtected)
+                    )
                 }
             }.collect()
         }
@@ -103,16 +105,17 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
         }
     }
 
-    private fun getChannelNameById(id: String) = channelList.find { it.id == id }?.name ?: "Undefined"
+    private fun getChannelNameById(id: String) = channelList.find { it.id == id }?.name
+            ?: "Undefined"
 
     fun copyClip(clipId: String) = CoroutineScope(Dispatchers.IO).launch {
         clipRepository.getAll()
                 .catch { e -> _errorLiveData.postValue(e) }
                 .collect {
-            it.find { it.id == clipId }?.apply {
-                _copyClipData.postValue(data)
-            }
-        }
+                    it.find { it.id == clipId }?.apply {
+                        _copyClipData.postValue(data)
+                    }
+                }
     }
 
     @ExperimentalCoroutinesApi
@@ -160,7 +163,7 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
                 return@let
             }
 
-            when(value) {
+            when (value) {
                 is ClipAction.ShowDetail -> getDetailedClipData(value.clipId)
                 is ClipAction.Copy -> copyClip(value.clipId)
             }
@@ -174,19 +177,22 @@ class ClipListViewModel(private val clipRepository: ClipRepository,
             oldClipItemModels.value = _clipItemsLiveData.value
 
         if (newText.isNullOrEmpty()) {
-            _clipItemsLiveData.value = oldClipItemModels.value
+            _clipItemsLiveData.value = oldClipItemModels.value?.onEach {
+                it.selectableText = null
+            }
             oldClipItemModels.value = null
         } else {
-            _clipItemsLiveData.value = oldClipItemModels.value?.
-            filter { it.description.contains(newText, true) }?.onEach {
-//                it.selectableText = newText
-            }
+            _clipItemsLiveData.value = oldClipItemModels.value
+                    ?.filter { it.description.contains(newText, true) }
+                    ?.onEach {
+                        it.selectableText = newText
+                    }
         }
     }
 
     sealed class ClipAction(val clipId: String, val isPermit: Boolean) {
-        class ShowDetail(clipId: String, isPermit: Boolean): ClipAction(clipId, isPermit)
-        class Copy(clipId: String, isPermit: Boolean): ClipAction(clipId, isPermit)
+        class ShowDetail(clipId: String, isPermit: Boolean) : ClipAction(clipId, isPermit)
+        class Copy(clipId: String, isPermit: Boolean) : ClipAction(clipId, isPermit)
     }
 
     data class DetailedClipModel(
